@@ -55,11 +55,27 @@ const defaultManager = {
   imageUrl: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/ayush-kale.jpg"
 };
 
+const defaultVideos = [
+  { id: 1, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-1.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9', badge: 'Wedding Teaser', title: 'Wedding Entrance Highlights', desc: 'Cinematic look at a luxury wedding entry setup with gold pillars and red flower arches.', type: 'wedding' },
+  { id: 2, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-2.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9', badge: 'Stage Walkthrough', title: 'Grand Reception Decor Reel', desc: 'Walkthrough showing the detailed lighting, chandeliers, and setup of a royal stage.', type: 'reception' },
+  { id: 3, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-3.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9', badge: 'Haldi Highlight', title: 'Vibrant Haldi Ceremony Clip', desc: 'Fun compilation clip of our signature marigold haldi setups and props.', type: 'haldi' },
+  { id: 4, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-4.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-4.jpg?v=9', badge: 'Catering Setup', title: 'Catering Buffet Setup Video', desc: 'Professional walkthrough of our premium gourmet multi-cuisine food spread and vessels.', type: 'catering' },
+  { id: 5, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-5.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9', badge: 'Floral Close-up', title: 'Bespoke Floral Work Highlights', desc: 'Detailed close-up on the handcrafted fresh floral decorations and flower frames.', type: 'wedding' },
+  { id: 6, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-6.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9', badge: 'Lawn Tour', title: 'Lawn Celebration Tour', desc: 'Drone-style walkthrough of a royal outdoor wedding lawn setup with light pillars.', type: 'wedding' },
+  { id: 7, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-7.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9', badge: 'Entrance Setup', title: 'Bride & Groom Entrance Setup', desc: 'A summary clip showing guest entry pathway lighting and structural decorations.', type: 'wedding' },
+  { id: 8, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-8.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-8.jpg?v=9', badge: 'Swing Decor', title: 'Traditional Marigold Swing Tour', desc: 'Beautiful wooden swing setup for the haldi ceremony in action with marigolds.', type: 'haldi' },
+  { id: 9, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-9.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9', badge: 'Stage Timelapse', title: 'Banquet Stage Decoration', desc: 'Grand wedding decoration setup timelapse coordinated by Mr. Ayush Kale.', type: 'wedding' },
+  { id: 10, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-10.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-7.jpg?v=9', badge: 'Haldi Reels', title: 'Haldi Ceremony Highlights', desc: 'Fun clips showing traditional music, yellow fabrics, and decor setups.', type: 'haldi' },
+  { id: 11, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-11.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-22.jpg?v=9', badge: 'Haldi Highlight', title: 'Haldi Ceremony of Eram', desc: "A beautiful cinematic reel of Eram's vibrant Haldi celebration, featuring bright pink drapes and marigolds.", type: 'haldi' },
+  { id: 12, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-12.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9', badge: 'Mandap cinematic', title: 'Saffron Mandap Cinematic', desc: 'Bespoke saffron wedding mandap floral arrangements and candle decor highlights.', type: 'wedding' }
+];
+
 export const DataProvider = ({ children }) => {
   const [packagesData, setPackagesData] = useState(defaultPackages);
   const [galleryData, setGalleryData] = useState(defaultGallery);
   const [testimonialsData, setTestimonialsData] = useState(defaultTestimonials);
   const [managerData, setManagerData] = useState(defaultManager);
+  const [videosData, setVideosData] = useState(defaultVideos);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -82,6 +98,12 @@ export const DataProvider = ({ children }) => {
         const mgrSnap = await getDoc(mgrRef);
         if (!mgrSnap.exists()) {
           await setDoc(mgrRef, defaultManager);
+        }
+
+        const vidRef = doc(db, 'content', 'videos');
+        const vidSnap = await getDoc(vidRef);
+        if (!vidSnap.exists() || !vidSnap.data().videos || vidSnap.data().videos.length === 0) {
+          await setDoc(vidRef, { videos: defaultVideos });
         }
         
         // Check testimonials collection empty? (we do this inside unsubTestimonials if empty but let's seed here)
@@ -128,6 +150,12 @@ export const DataProvider = ({ children }) => {
       }
     });
 
+    const unsubVideos = onSnapshot(doc(db, 'content', 'videos'), (doc) => {
+      if (doc.exists()) {
+        setVideosData(doc.data().videos || []);
+      }
+    });
+
     setLoading(false);
 
     return () => {
@@ -135,6 +163,7 @@ export const DataProvider = ({ children }) => {
       unsubGallery();
       unsubTestimonials();
       unsubManager();
+      unsubVideos();
     };
   }, []);
 
@@ -143,6 +172,7 @@ export const DataProvider = ({ children }) => {
     galleryData,
     testimonialsData,
     managerData,
+    videosData,
     loading
   };
 

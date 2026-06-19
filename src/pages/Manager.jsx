@@ -51,39 +51,7 @@ const Manager = () => {
           </div>
       </section>
 
-      <section className="instagram-section" id="instagram-feed">
-          <div className="section-header" style={{ marginBottom: '40px' }}>
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ Follow Our Journey ✦</p>
-              <h2 data-animate data-delay="250ms">Instagram <span className="gold-text">Showcase</span></h2>
-              <p style={{ color: 'var(--text-secondary)', marginTop: '10px', fontSize: '0.95rem' }}>@royal_eventanddecor • Capturing real event highlights daily</p>
-          </div>
-          <div className="instagram-grid">
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9" alt="Instagram post 1" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9" alt="Instagram post 2" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9" alt="Instagram post 3" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9" alt="Instagram post 4" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9" alt="Instagram post 5" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" alt="Instagram post 6" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-          </div>
-      </section>
+      {/* Instagram section removed */}
     </main>
   );
 };

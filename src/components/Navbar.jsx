@@ -20,22 +20,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomepage]);
 
-  const toggleTheme = () => {
-    const isLight = document.body.classList.toggle('light-mode');
-    localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    const icon = document.querySelector('#theme-toggle i');
-    if (icon) {
-      icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-    }
-  };
 
-  useEffect(() => {
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-mode');
-      const icon = document.querySelector('#theme-toggle i');
-      if (icon) icon.className = 'fa-solid fa-sun';
-    }
-  }, []);
 
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar">
@@ -57,9 +42,6 @@ const Navbar = () => {
         </ul>
 
         <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, justifyContent: 'flex-end' }}>
-            <button id="theme-toggle" className="theme-toggle-btn" aria-label="Toggle Theme" onClick={toggleTheme}>
-                <i className="fa-solid fa-moon"></i>
-            </button>
             <div className="nav-toggle" id="nav-toggle" onClick={() => setMenuActive(!menuActive)}>
                 <i className={`fa-solid ${menuActive ? 'fa-xmark' : 'fa-bars'}`}></i>
             </div>

@@ -2777,25 +2777,26 @@ body.light-mode .review-item-card {
 .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
+    gap: 35px;
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 20px;
 }
 .video-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 15px;
+    border-radius: 18px;
     overflow: hidden;
     transition: var(--transition);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 .video-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(1.01);
     border-color: var(--border-hover);
-    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 20px 50px rgba(212, 175, 55, 0.2);
 }
 .video-wrapper {
     position: relative;
@@ -2809,6 +2810,33 @@ body.light-mode .review-item-card {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.4s ease;
+}
+.video-card:hover .video-wrapper video {
+    transform: scale(1.05);
+}
+.video-play-hint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+.video-play-hint i {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+.video-card:hover .video-play-hint {
+    opacity: 0;
 }
 .video-badge {
     position: absolute;
@@ -2816,7 +2844,7 @@ body.light-mode .review-item-card {
     left: 15px;
     background: var(--gold-gradient);
     color: #070d1e;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
     font-size: 0.65rem;
     font-weight: 600;
@@ -2826,22 +2854,28 @@ body.light-mode .review-item-card {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 .video-card-info {
-    padding: 25px;
+    padding: 22px 25px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 .video-card-info h3 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     margin-bottom: 8px;
     color: var(--text-primary);
-    font-weight: 400;
+    font-weight: 500;
 }
 .video-card-info p {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.6;
+}
+@media (max-width: 992px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
 }
 @media (max-width: 768px) {
     .video-grid {

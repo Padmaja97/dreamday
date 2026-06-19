@@ -10,7 +10,8 @@ import {
   LogOut,
   Menu,
   X,
-  Crown
+  Crown,
+  Video
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,6 +19,7 @@ const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Pricing', href: '/prices', icon: DollarSign },
   { name: 'Gallery', href: '/gallery', icon: ImageIcon },
+  { name: 'Videos', href: '/videos', icon: Video },
   { name: 'Manager', href: '/manager', icon: User },
   { name: 'Inquiries', href: '/inquiries', icon: Mail },
 ];
@@ -26,6 +28,7 @@ const pageTitles = {
   '/': 'Dashboard',
   '/prices': 'Pricing',
   '/gallery': 'Gallery',
+  '/videos': 'Video Highlights',
   '/manager': 'Manager',
   '/testimonials': 'Testimonials',
   '/inquiries': 'Inquiries',

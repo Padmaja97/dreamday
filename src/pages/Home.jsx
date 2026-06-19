@@ -5,6 +5,7 @@ import { useData } from '../context/DataContext';
 
 const Home = () => {
   useScrollAnimation();
+  const { videosData } = useData();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   // Handle stats animation
@@ -108,7 +109,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="hero" id="home" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg')" }}>
-          <video autoPlay muted playsInline className="hero-video-bg" id="hero-bg-video" poster="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, pointerEvents: 'none' }}>
+          <video autoPlay loop muted playsInline className="hero-video-bg" id="hero-bg-video" poster="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, pointerEvents: 'none' }}>
               <source src="/images/video-2.mp4" type="video/mp4" />
           </video>
           <div className="luxury-frame" style={{ zIndex: 2 }}></div>
@@ -215,39 +216,18 @@ const Home = () => {
               <h2 data-animate data-delay="250ms">Cinematic <span className="gold-text">Highlights</span></h2>
           </div>
           <div className="luxury-video-trio">
-              {/* Video 1 */}
-              <div className="video-trio-card" id="trio-player-1">
-                  <span className="video-trio-badge">Wedding Teaser</span>
-                  <video autoPlay muted playsInline preload="auto" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9')" }}>
-                      <source src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-1.mp4" type="video/mp4" />
-                  </video>
-                  <div className="video-trio-overlay">
-                      <h3>Wedding Entrance Highlights</h3>
-                      <p>A cinematic look at a luxury wedding entry setup with gold pillars and floral arches.</p>
+              {videosData && videosData.slice(0, 3).map((vid, idx) => (
+                  <div className="video-trio-card" id={`trio-player-${idx + 1}`} key={vid.id || idx}>
+                      <span className="video-trio-badge">{vid.badge || 'Highlight'}</span>
+                      <video autoPlay loop muted playsInline preload="auto" poster={vid.poster} style={{ backgroundImage: `url('${vid.poster}')` }}>
+                          <source src={vid.src || vid.url} type="video/mp4" />
+                      </video>
+                      <div className="video-trio-overlay">
+                          <h3>{vid.title}</h3>
+                          <p>{vid.desc || vid.title}</p>
+                      </div>
                   </div>
-              </div>
-              {/* Video 2 */}
-              <div className="video-trio-card" id="trio-player-2">
-                  <span className="video-trio-badge">Stage Walkthrough</span>
-                  <video autoPlay muted playsInline preload="auto" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9')" }}>
-                      <source src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-2.mp4" type="video/mp4" />
-                  </video>
-                  <div className="video-trio-overlay">
-                      <h3>Grand Reception Decor Reel</h3>
-                      <p>Walkthrough showing the detailed lighting, chandeliers, and setup of a royal stage.</p>
-                  </div>
-              </div>
-              {/* Video 3 */}
-              <div className="video-trio-card" id="trio-player-3">
-                  <span className="video-trio-badge">Haldi Highlight</span>
-                  <video autoPlay muted playsInline preload="auto" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9')" }}>
-                      <source src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-3.mp4" type="video/mp4" />
-                  </video>
-                  <div className="video-trio-overlay">
-                      <h3>Vibrant Haldi Ceremony Clip</h3>
-                      <p>A fun compilation clip of our signature traditional marigold haldi setups and props.</p>
-                  </div>
-              </div>
+              ))}
           </div>
           <div style={{ textAlign: 'center', marginTop: '50px' }} data-animate>
               <a href="https://www.instagram.com/royal_eventanddecor/reels/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
@@ -547,40 +527,7 @@ const Home = () => {
           </div>
       </section>
 
-      {/* Instagram Feed Showcase Section */}
-      <section className="instagram-section" id="instagram-feed">
-          <div className="section-header" style={{ marginBottom: '40px' }}>
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ Follow Our Journey ✦</p>
-              <h2 data-animate data-delay="250ms">Instagram <span className="gold-text">Showcase</span></h2>
-              <p style={{ color: 'var(--text-secondary)', marginTop: '10px', fontSize: '0.95rem' }}>@royal_eventanddecor • Capturing real event highlights daily</p>
-          </div>
-          <div className="instagram-grid">
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9" alt="Instagram post 1" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9" alt="Instagram post 2" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9" alt="Instagram post 3" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9" alt="Instagram post 4" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9" alt="Instagram post 5" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-              <div className="instagram-item" onClick={() => window.open('https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==', '_blank')}>
-                  <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" alt="Instagram post 6" />
-                  <div className="instagram-overlay"><i className="fa-brands fa-instagram"></i> View Post</div>
-              </div>
-          </div>
-      </section>
+      {/* Instagram section removed */}
     </main>
   );
 };

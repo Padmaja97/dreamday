@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
 import { Link } from 'react-router-dom';
+import { useData } from '../context/DataContext';
 
 const Videos = () => {
   useScrollAnimation();
+  const videoRefs = useRef({});
 
-  const videos = [
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-1.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9', badge: 'Wedding Teaser', title: 'Wedding Entrance Highlights', desc: 'Cinematic look at a luxury wedding entry setup with gold pillars and red flower arches.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-2.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9', badge: 'Stage Walkthrough', title: 'Grand Reception Decor Reel', desc: 'Walkthrough showing the detailed lighting, chandeliers, and setup of a royal stage.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-3.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9', badge: 'Haldi Highlight', title: 'Vibrant Haldi Ceremony Clip', desc: 'Fun compilation clip of our signature marigold haldi setups and props.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-4.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-4.jpg?v=9', badge: 'Catering Setup', title: 'Catering Buffet Setup Video', desc: 'Professional walkthrough of our premium gourmet multi-cuisine food spread and vessels.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-5.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9', badge: 'Floral Close-up', title: 'Bespoke Floral Work Highlights', desc: 'Detailed close-up on the handcrafted fresh floral decorations and flower frames.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-6.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9', badge: 'Lawn Tour', title: 'Lawn Celebration Tour', desc: 'Drone-style walkthrough of a royal outdoor wedding lawn setup with light pillars.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-7.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9', badge: 'Entrance Setup', title: 'Bride & Groom Entrance Setup', desc: 'A summary clip showing guest entry pathway lighting and structural decorations.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-8.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-8.jpg?v=9', badge: 'Swing Decor', title: 'Traditional Marigold Swing Tour', desc: 'Beautiful wooden swing setup for the haldi ceremony in action with marigolds.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-9.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9', badge: 'Stage Timelapse', title: 'Banquet Stage Decoration', desc: 'Grand wedding decoration setup timelapse coordinated by Mr. Ayush Kale.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-10.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-7.jpg?v=9', badge: 'Haldi Reels', title: 'Haldi Ceremony Highlights', desc: 'Fun clips showing traditional music, yellow fabrics, and decor setups.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-11.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-22.jpg?v=9', badge: 'Haldi Highlight', title: 'Haldi Ceremony of Eram', desc: 'A beautiful cinematic reel of Eram\'s vibrant Haldi celebration, featuring bright pink drapes and marigolds.' },
-    { src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-12.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9', badge: 'Mandap cinematic', title: 'Saffron Mandap Cinematic', desc: 'Bespoke saffron wedding mandap floral arrangements and candle decor highlights.' }
-  ];
+  const { videosData: videos } = useData();
+
+  const handleMouseEnter = useCallback((idx) => {
+    const video = videoRefs.current[idx];
+    if (video) {
+      video.play().catch(() => {});
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback((idx) => {
+    const video = videoRefs.current[idx];
+    if (video) {
+      video.pause();
+    }
+  }, []);
 
   return (
     <main>
@@ -26,19 +29,36 @@ const Videos = () => {
       <header className="portfolio-hero" style={{ backgroundImage: "linear-gradient(135deg, rgba(30, 80, 150, 0.2) 0%, rgba(10, 25, 60, 0.6) 100%), url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', padding: '120px 5% 60px 5%', textAlign: 'center', borderBottom: '1px solid var(--border-color)' }}>
           <p className="hero-tagline" data-animate data-delay="100ms">✦ Event Teasers & Walks ✦</p>
           <h2 data-animate data-delay="250ms">Cinematic <span className="gold-text">Glimpses</span></h2>
-          <p data-animate data-delay="400ms" style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto', marginTop: '15px' }}>Step inside our magical designs through these video reels and setup walkthroughs.</p>
+          <p data-animate data-delay="400ms" style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto', marginTop: '15px' }}>Step inside our magical designs through these video reels and setup walkthroughs. Hover over any video to preview it instantly.</p>
       </header>
 
       {/* Video Grid Section */}
       <section className="portfolio-section" style={{ paddingTop: '40px', minHeight: '60vh' }}>
           <div className="video-grid">
               {videos.map((vid, idx) => (
-                  <div key={idx} className="video-card" data-animate>
+                  <div
+                    key={idx}
+                    className="video-card"
+                    data-animate
+                    onMouseEnter={() => handleMouseEnter(idx)}
+                    onMouseLeave={() => handleMouseLeave(idx)}
+                  >
                       <div className="video-wrapper">
                           <span className="video-badge">{vid.badge}</span>
-                          <video controls muted loop preload="metadata" poster={vid.poster} style={{ backgroundImage: `url('${vid.poster}')`, backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}>
+                          <video
+                            ref={(el) => { videoRefs.current[idx] = el; }}
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            poster={vid.poster}
+                            style={{ backgroundImage: `url('${vid.poster}')`, backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                          >
                               <source src={vid.src} type="video/mp4" />
                           </video>
+                          <div className="video-play-hint">
+                              <i className="fa-solid fa-play"></i>
+                          </div>
                       </div>
                       <div className="video-card-info">
                           <h3>{vid.title}</h3>

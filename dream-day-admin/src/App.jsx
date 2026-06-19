@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Prices from './pages/Prices';
 import Gallery from './pages/Gallery';
 import Manager from './pages/Manager';
+import Videos from './pages/Videos';
 import Inquiries from './pages/Inquiries';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="prices" element={<Prices />} />
               <Route path="gallery" element={<Gallery />} />
+              <Route path="videos" element={<Videos />} />
               <Route path="manager" element={<Manager />} />
               <Route path="inquiries" element={<Inquiries />} />
             </Route>

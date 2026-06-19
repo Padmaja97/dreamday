@@ -7,7 +7,8 @@ import {
   Image as ImageIcon, 
   DollarSign,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Video
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard';
@@ -21,24 +22,26 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        // Fetch all counts in parallel
-        const [inquiriesSnap, gallerySnap, packagesSnap] = await Promise.all([
+        const [inquiriesSnap, gallerySnap, packagesSnap, videosSnap] = await Promise.all([
           getDocs(collection(db, 'inquiries')),
           getDoc(doc(db, 'content', 'gallery')),
           getDoc(doc(db, 'content', 'packages')),
+          getDoc(doc(db, 'content', 'videos')),
         ]);
 
         const galleryImages = gallerySnap.exists() ? (gallerySnap.data().images?.length || 0) : 0;
         const packageCount = packagesSnap.exists() ? Object.keys(packagesSnap.data()).length : 0;
+        const videoCount = videosSnap.exists() ? (videosSnap.data().videos?.length || 0) : 0;
 
         setStats({
           inquiries: inquiriesSnap.size,
           gallery: galleryImages,
           packages: packageCount,
+          videos: videoCount,
         });
       } catch (err) {
         console.error('Error fetching stats:', err);
-        setStats({ inquiries: 0, gallery: 0, packages: 0 });
+        setStats({ inquiries: 0, gallery: 0, packages: 0, videos: 0 });
       } finally {
         setLoading(false);
       }
@@ -57,6 +60,7 @@ export default function Dashboard() {
 
   const quickActions = [
     { name: 'Gallery', desc: 'Upload & manage photos', href: '/gallery', icon: ImageIcon, color: 'text-info bg-info-subtle' },
+    { name: 'Videos', desc: 'Upload cinematic highlights', href: '/videos', icon: Video, color: 'text-purple-500 bg-purple-500/10' },
     { name: 'Inquiries', desc: 'View new leads', href: '/inquiries', icon: Mail, color: 'text-accent bg-accent-subtle' },
   ];
 
@@ -92,6 +96,12 @@ export default function Dashboard() {
           label="Gallery Images"
           value={stats.gallery}
           tintClass="text-info bg-info-subtle"
+        />
+        <StatCard
+          icon={Video}
+          label="Videos"
+          value={stats.videos}
+          tintClass="text-purple-500 bg-purple-500/10"
         />
         <StatCard
           icon={DollarSign}
