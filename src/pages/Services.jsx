@@ -40,7 +40,6 @@ const Services = () => {
                       <span className="service-card-meta">250+ Weddings Decorated</span>
                       <p>Grand stage designs, beautiful mandaps, entrance archways and floral styling that leave a lasting impression.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('wedding-decor'); }}>Learn More</button>
                           <Link to="/inquire?service=Wedding Decor" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -57,7 +56,6 @@ const Services = () => {
                       <span className="service-card-meta">180+ Ceremonies Styled</span>
                       <p>Vibrant, colourful, and custom setups using fresh flowers and unique props matching your traditional themes.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('haldi-mehndi'); }}>Learn More</button>
                           <Link to="/inquire?service=Haldi and Mehndi" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -74,7 +72,6 @@ const Services = () => {
                       <span className="service-card-meta">120+ Grand Receptions</span>
                       <p>Ultra-modern layouts, ambient lighting setups, elegant drapes, and high-fashion lounges for post-wedding events.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('reception-decor'); }}>Learn More</button>
                           <Link to="/inquire?service=Reception Decor" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -91,7 +88,6 @@ const Services = () => {
                       <span className="service-card-meta">300+ Feasts Served</span>
                       <p>Exquisite culinary experience with premium serving displays, tailored menus, and professional hospitality staff.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('gourmet-catering'); }}>Learn More</button>
                           <Link to="/inquire?service=Gourmet Catering" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -108,7 +104,6 @@ const Services = () => {
                       <span className="service-card-meta">150+ Celebrations</span>
                       <p>Creative themed designs, balloons, and customized decor for kids' birthdays and private social gatherings.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('themed-parties'); }}>Learn More</button>
                           <Link to="/inquire?service=Themed Parties" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -125,7 +120,6 @@ const Services = () => {
                       <span className="service-card-meta">90+ Corporate Events</span>
                       <p>Professional stage branding, audio-visual coordinate setups, premium conference decor, and awards night arrangements.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('corporate-galas'); }}>Learn More</button>
                           <Link to="/inquire?service=Corporate Event" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -142,7 +136,6 @@ const Services = () => {
                       <span className="service-card-meta">200+ Shoots Covered</span>
                       <p>Cinematic highlight reels, professional event photography, and drone packages capturing every single emotion.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('photography-videography'); }}>Learn More</button>
                           <Link to="/inquire?service=Photography" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -159,7 +152,6 @@ const Services = () => {
                       <span className="service-card-meta">100+ Live Stages</span>
                       <p>Live wedding bands, classical musicians, professional DJs, sound setups, and elite artist management.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('entertainment-music'); }}>Learn More</button>
                           <Link to="/inquire?service=Entertainment" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -176,7 +168,6 @@ const Services = () => {
                       <span className="service-card-meta">70+ Event Fleets</span>
                       <p>Premium guest arrivals, vehicle arrangements, route coordination, and hospitality helpdesk management.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('transport-logistics'); }}>Learn More</button>
                           <Link to="/inquire?service=Transport" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>
@@ -193,7 +184,6 @@ const Services = () => {
                       <span className="service-card-meta">500+ Floral Styles</span>
                       <p>Exotic floral setups, table centerpieces, fresh flower decorations, and customized boutique arrangements.</p>
                       <div className="service-card-actions">
-                          <button className="btn btn-card-more" onClick={(e) => { e.stopPropagation(); openModal('floral-arrangements'); }}>Learn More</button>
                           <Link to="/inquire?service=Floral" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
                       </div>
                   </div>

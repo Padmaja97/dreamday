@@ -1,10 +1,12 @@
 import React, { useRef, useCallback } from 'react';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
+import { useLightbox } from '../utils/LightboxContext';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 
 const Videos = () => {
   useScrollAnimation();
+  const { openLightbox } = useLightbox();
   const videoRefs = useRef({});
 
   const { videosData: videos } = useData();
@@ -42,6 +44,7 @@ const Videos = () => {
                     data-animate
                     onMouseEnter={() => handleMouseEnter(idx)}
                     onMouseLeave={() => handleMouseLeave(idx)}
+                    onClick={() => openLightbox('video', vid.src)}
                   >
                       <div className="video-wrapper">
                           <span className="video-badge">{vid.badge}</span>

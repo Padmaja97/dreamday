@@ -22,9 +22,9 @@ const Gallery = () => {
     <main>
       {/* Gallery Hero Section */}
       <header className="portfolio-hero" style={{ backgroundImage: "linear-gradient(135deg, rgba(30, 80, 150, 0.2) 0%, rgba(10, 25, 60, 0.6) 100%), url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', padding: '120px 5% 60px 5%', textAlign: 'center', borderBottom: '1px solid var(--border-color)' }}>
-          <p className="hero-tagline">✦ Royal Visual Delights ✦</p>
-          <h2>Our <span className="gold-text">Creations Gallery</span></h2>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto', marginTop: '15px' }}>Explore our stunning royal wedding stages, vibrant traditional haldi setups, and elite corporate decors designed by Mr. Ayush Kale.</p>
+          <p className="hero-tagline" data-animate data-delay="100ms">✦ Royal Visual Delights ✦</p>
+          <h2 data-animate data-delay="250ms">Our <span className="gold-text">Creations Gallery</span></h2>
+          <p data-animate data-delay="400ms" style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto', marginTop: '15px' }}>Explore our stunning royal wedding stages, vibrant traditional haldi setups, and elite corporate decors designed by Mr. Ayush Kale.</p>
       </header>
 
       {/* Gallery Section */}
@@ -38,7 +38,7 @@ const Gallery = () => {
           
           <div className="gallery-grid" id="dynamic-gallery-grid">
               {dynamicGallery.filter(item => filter === 'all' || item.category === filter).map((item, idx) => (
-                  <div key={idx} className="gallery-item" data-category={item.category} data-animate onClick={() => openLightbox(item.src)}>
+                  <div key={idx} className="gallery-item" data-category={item.category} data-animate onClick={() => openLightbox('photo', item.src)}>
                       <img src={item.src} alt={item.title} />
                       <div className="gallery-overlay">
                           <h4>{item.title}</h4>
@@ -56,7 +56,7 @@ const Gallery = () => {
               </div>
               <div className="luxury-video-trio">
                   {/* Video 1 */}
-                  <div className="video-trio-card" id="trio-player-1">
+                  <div className="video-trio-card" id="trio-player-1" onClick={() => openLightbox('video', 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-1.mp4')} style={{ cursor: 'pointer' }}>
                       <span className="video-trio-badge">Wedding Teaser</span>
                       <video autoPlay muted playsInline preload="auto" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9')" }}>
                           <source src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-1.mp4" type="video/mp4" />
@@ -68,7 +68,7 @@ const Gallery = () => {
                   </div>
 
                   {/* Video 2 */}
-                  <div className="video-trio-card" id="trio-player-2">
+                  <div className="video-trio-card" id="trio-player-2" onClick={() => openLightbox('video', 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-2.mp4')} style={{ cursor: 'pointer' }}>
                       <span className="video-trio-badge">Stage Walkthrough</span>
                       <video autoPlay muted playsInline preload="auto" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9')" }}>
                           <source src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-2.mp4" type="video/mp4" />
@@ -80,7 +80,7 @@ const Gallery = () => {
                   </div>
 
                   {/* Video 3 */}
-                  <div className="video-trio-card" id="trio-player-3">
+                  <div className="video-trio-card" id="trio-player-3" onClick={() => openLightbox('video', 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-3.mp4')} style={{ cursor: 'pointer' }}>
                       <span className="video-trio-badge">Haldi Highlight</span>
                       <video autoPlay muted playsInline preload="auto" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9')" }}>
                           <source src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-3.mp4" type="video/mp4" />

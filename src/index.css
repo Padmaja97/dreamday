@@ -1,4 +1,4 @@
-/* Google Fonts */
+﻿/* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -90,12 +90,171 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 1.5px;
 }
 
+/* ==========================================
+   SCROLL ANIMATIONS SYSTEM
+   ========================================== */
+
+/* Default: Fade Up animation for all [data-animate] elements */
+[data-animate] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+[data-animate].animate {
+    opacity: 1;
+    transform: translateY(0) scale(1) translateX(0);
+    filter: blur(0);
+}
+
+/* Fade In (no movement, just opacity) */
+[data-animate="fade-in"] {
+    opacity: 0;
+    transform: none;
+}
+
+/* Scale Up */
+[data-animate="scale-up"] {
+    opacity: 0;
+    transform: scale(0.85);
+}
+
+/* Slide from Left */
+[data-animate="slide-left"] {
+    opacity: 0;
+    transform: translateX(-60px);
+}
+
+/* Slide from Right */
+[data-animate="slide-right"] {
+    opacity: 0;
+    transform: translateX(60px);
+}
+
+/* Blur In */
+[data-animate="blur-in"] {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(20px);
+}
+
+/* Zoom In with Rotate */
+[data-animate="zoom-rotate"] {
+    opacity: 0;
+    transform: scale(0.7) rotate(-4deg);
+}
+
+/* Flip Up */
+[data-animate="flip-up"] {
+    opacity: 0;
+    transform: perspective(800px) rotateX(15deg) translateY(30px);
+}
+
+/* Stagger children: apply data-stagger on the parent container */
+[data-stagger] > * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-stagger].animate > *:nth-child(1) { transition-delay: 0.05s; }
+[data-stagger].animate > *:nth-child(2) { transition-delay: 0.12s; }
+[data-stagger].animate > *:nth-child(3) { transition-delay: 0.19s; }
+[data-stagger].animate > *:nth-child(4) { transition-delay: 0.26s; }
+[data-stagger].animate > *:nth-child(5) { transition-delay: 0.33s; }
+[data-stagger].animate > *:nth-child(6) { transition-delay: 0.40s; }
+[data-stagger].animate > *:nth-child(7) { transition-delay: 0.47s; }
+[data-stagger].animate > *:nth-child(8) { transition-delay: 0.54s; }
+[data-stagger].animate > *:nth-child(9) { transition-delay: 0.61s; }
+[data-stagger].animate > *:nth-child(10) { transition-delay: 0.68s; }
+[data-stagger].animate > *:nth-child(11) { transition-delay: 0.75s; }
+[data-stagger].animate > *:nth-child(12) { transition-delay: 0.82s; }
+
+[data-stagger].animate > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Section headers get a special elegant entrance */
+.section-header [data-animate],
+.section-header[data-animate] {
+    opacity: 0;
+    transform: translateY(25px);
+}
+
+/* Gold text shimmer on animate */
+.gold-text {
+    background-size: 200% auto;
+    transition: background-position 1.2s ease;
+}
+.animate .gold-text,
+.gold-text.animate {
+    animation: goldShimmer 3s ease infinite;
+}
+
+@keyframes goldShimmer {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
+}
+
+/* Counter / number count-up effect placeholder */
+[data-animate="count-up"] {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+}
+
+/* Parallax-like subtle float for hero sections */
+@keyframes subtleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.hero-tagline.animate,
+[data-animate].animate .hero-tagline {
+    animation: subtleFloat 4s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+/* Card hover lift enhancement (works on animated cards) */
+.package-card.animate,
+.portfolio-card.animate,
+.service-card.animate,
+.gallery-item.animate {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s ease,
+                opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.package-card.animate:hover,
+.portfolio-card.animate:hover,
+.service-card.animate:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(212, 175, 55, 0.12);
+}
+
+.gallery-item.animate:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15);
+}
+
+
+
+/* ==========================================
+   END SCROLL ANIMATIONS
+   ========================================== */
+
 /* Common Classes & Elements */
 section {
     padding: 100px 5%;
     position: relative;
     background-color: transparent;
     transition: background-color 0.4s ease;
+    overflow: hidden;
 }
 
 .section-header {
@@ -113,7 +272,7 @@ section {
 }
 
 .section-header h2::after {
-    content: '✦';
+    content: 'âœ¦';
     position: absolute;
     bottom: -12px;
     left: 50%;
@@ -465,6 +624,7 @@ section {
 /* About Section */
 .about {
     background-color: var(--bg-secondary);
+    overflow: hidden;
 }
 
 .about-container {
@@ -875,7 +1035,7 @@ section {
 }
 
 .lining-node::before {
-    content: '✦';
+    content: 'âœ¦';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -2437,45 +2597,6 @@ body.light-mode .exit-modal {
     background: rgba(15, 23, 42, 0.7);
 }
 
-/* As Seen In Section */
-.featured-strip {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    padding: 35px 5%;
-    text-align: center;
-    z-index: 3;
-    position: relative;
-}
-.featured-strip p {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--gold-primary);
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-.featured-logos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 60px;
-    flex-wrap: wrap;
-    opacity: 0.85;
-}
-.featured-logo-item {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    letter-spacing: 2px;
-    transition: var(--transition);
-    user-select: none;
-}
-.featured-logo-item:hover {
-    color: var(--gold-primary);
-    transform: scale(1.05);
-}
 
 /* Before & After Section */
 .ba-section {
@@ -2893,7 +3014,7 @@ body.light-mode .review-item-card {
 /* Enhanced Service Card Grid & Container */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
 }
 
@@ -2910,6 +3031,7 @@ body.light-mode .review-item-card {
     height: 100%;
     text-align: center;
     cursor: pointer;
+    padding: 0;
 }
 
 .service-card:hover {
@@ -2921,7 +3043,7 @@ body.light-mode .review-item-card {
 .service-img-wrapper {
     position: relative;
     width: 100%;
-    height: 190px;
+    height: 180px;
     overflow: hidden;
 }
 
@@ -2953,7 +3075,7 @@ body.light-mode .review-item-card {
 }
 
 .service-card-content {
-    padding: 30px 25px 35px 25px;
+    padding: 20px 20px 25px 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -3012,7 +3134,8 @@ body.light-mode .review-item-card {
 
 .service-card-actions {
     display: flex;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
     justify-content: center;
     margin-top: auto;
 }
@@ -3402,3 +3525,177 @@ body.light-mode .review-item-card {
         font-size: 1.6rem;
     }
 }
+
+/* ==========================================
+   SERVICES CAROUSEL (Home Page)
+   ========================================== */
+.services-horizontal-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 25px;
+    padding: 20px 0 40px 0;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.services-horizontal-track::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.services-horizontal-track .compact-card {
+    width: calc((90vw - 62.5px) / 3.5); /* Fixed width instead of flex-basis to prevent max-content parent issues */
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    min-width: 280px; 
+    border-radius: 15px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.services-horizontal-track .compact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15);
+}
+
+.compact-card .service-img-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.compact-card .service-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.compact-card:hover .service-card-img {
+    transform: scale(1.05);
+}
+
+/* Responsive Carousel */
+@media (min-width: 992px) {
+    .services-pin-wrapper {
+        height: 300vh;
+        position: relative;
+        overflow: visible; /* Required for sticky positioning to work since sections have overflow:hidden by default */
+        padding: 0;
+    }
+    .services-sticky-container {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .services-horizontal-track {
+        display: flex;
+        gap: 25px;
+        padding: 20px 5% 40px 5%;
+        width: max-content;
+        will-change: transform;
+    }
+    .services-carousel {
+        display: none; /* override previous display flex if it conflicts, but we renamed it to services-horizontal-track */
+    }
+}
+
+@media (max-width: 1200px) {
+    .services-horizontal-track .compact-card {
+        width: calc((90vw - 50px) / 3); /* 3 cards */
+        flex-shrink: 0;
+    }
+}
+@media (max-width: 991px) {
+    .services-pin-wrapper {
+        height: auto;
+    }
+    .services-sticky-container {
+        position: relative;
+        height: auto;
+        display: block;
+    }
+    .services-horizontal-track {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 25px;
+        padding: 20px 5% 40px 5%;
+        scroll-behavior: smooth;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .services-horizontal-track::-webkit-scrollbar {
+        display: none;
+    }
+    .services-horizontal-track .compact-card {
+        width: calc((90vw - 37.5px) / 2.5); /* 2.5 cards */
+        flex-shrink: 0;
+        scroll-snap-align: start;
+    }
+}
+@media (max-width: 768px) {
+    .services-horizontal-track .compact-card {
+        width: calc((90vw - 12.5px) / 1.5); /* 1.5 cards */
+        flex-shrink: 0;
+    }
+}
+@media (max-width: 480px) {
+    .services-horizontal-track .compact-card {
+        width: 90vw; /* 1 card */
+        flex-shrink: 0;
+        scroll-snap-align: center;
+    }
+}
+
+
+/* Marquee Testimonials Animation */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.marquee-content {
+    display: flex;
+    animation: scrollMarquee 45s linear infinite;
+}
+
+.marquee-content:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.marquee-fade-left {
+    background: linear-gradient(to right, var(--bg-primary), transparent);
+}
+
+.marquee-fade-right {
+    background: linear-gradient(to left, var(--bg-primary), transparent);
+}
+
+body.light-mode .marquee-fade-left {
+    background: linear-gradient(to right, var(--bg-primary), transparent);
+}
+
+body.light-mode .marquee-fade-right {
+    background: linear-gradient(to left, var(--bg-primary), transparent);
+}
+

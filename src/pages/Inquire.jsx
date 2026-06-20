@@ -62,7 +62,7 @@ const Inquire = () => {
       {/* Contact Form Section */}
       <section className="contact" id="contact" style={{ paddingTop: '50px', minHeight: '70vh' }}>
           <div className="contact-container">
-              <div className="contact-form-wrapper" data-animate>
+              <div className="contact-form-wrapper" data-animate="slide-left">
                   <form id="contact-form" onSubmit={handleSubmit}>
                       <div className="form-row">
                           <div className="form-group">
@@ -137,7 +137,7 @@ const Inquire = () => {
                   </form>
               </div>
               
-              <div className="contact-info-wrapper" data-animate>
+              <div className="contact-info-wrapper" data-animate="slide-right">
                   <div>
                       <div className="info-item">
                           <div className="info-icon"><i className="fa-solid fa-phone"></i></div>

@@ -108,7 +108,7 @@ const Portfolio = () => {
           <div className="portfolio-grid" id="dynamic-portfolio-grid">
               {portfolioItems.filter(item => filter === 'all' || item.category === filter).map((item, idx) => (
                   <div key={idx} className="portfolio-card" data-animate>
-                      <div className="portfolio-img-wrapper" style={{ position: item.type === 'video' ? 'relative' : 'static' }} onClick={() => item.type === 'photo' && openLightbox(item.src)}>
+                      <div className="portfolio-img-wrapper" style={{ position: item.type === 'video' ? 'relative' : 'static' }} onClick={() => openLightbox(item.type, item.src)}>
                           <span className="portfolio-tag" style={item.type === 'video' ? { background: 'var(--gold-gradient)', color: '#070d1e', zIndex: 3 } : {}}>{item.tag}</span>
                           {item.type === 'photo' ? (
                               <img src={item.src} alt={item.title} />

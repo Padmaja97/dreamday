@@ -1,12 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
+import { useLightbox } from '../utils/LightboxContext';
 import { useData } from '../context/DataContext';
 
 const Home = () => {
   useScrollAnimation();
+  const { openLightbox } = useLightbox();
   const { videosData } = useData();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  const horizontalSectionRef = useRef(null);
+  const horizontalContentRef = useRef(null);
+
+  // Handle pinned horizontal scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only apply on desktop
+      if (window.innerWidth < 992) {
+        if (horizontalContentRef.current) {
+           horizontalContentRef.current.style.transform = `translateX(0px)`;
+        }
+        return;
+      }
+      
+      if (!horizontalSectionRef.current || !horizontalContentRef.current) return;
+      const section = horizontalSectionRef.current;
+      const content = horizontalContentRef.current;
+      
+      const rect = section.getBoundingClientRect();
+      
+      // The section is pinned when rect.top <= 0 and rect.bottom >= window.innerHeight
+      if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+         // Calculate progress from 0 to 1
+         const scrollableHeight = rect.height - window.innerHeight;
+         const scrollProgress = Math.abs(rect.top) / scrollableHeight;
+         
+         // Max horizontal scroll distance
+         const maxScroll = content.scrollWidth - window.innerWidth;
+         content.style.transform = `translateX(-${scrollProgress * maxScroll}px)`;
+      } else if (rect.top > 0) {
+         content.style.transform = `translateX(0px)`;
+      } else if (rect.bottom < window.innerHeight) {
+         const maxScroll = content.scrollWidth - window.innerWidth;
+         content.style.transform = `translateX(-${maxScroll}px)`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    // Initial call to set correct position on load
+    handleScroll();
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Handle stats animation
   useEffect(() => {
@@ -65,6 +111,7 @@ const Home = () => {
   // Handle Before/After slider
   useEffect(() => {
     const baContainers = document.querySelectorAll('.ba-container');
+    const cleanupFns = [];
     
     baContainers.forEach(container => {
         const sliderBar = container.querySelector('.ba-slider-bar');
@@ -96,12 +143,14 @@ const Home = () => {
         container.addEventListener('mousedown', onMove);
 
         // Cleanup
-        return () => {
+        cleanupFns.push(() => {
             container.removeEventListener('mousemove', onMove);
             container.removeEventListener('touchmove', onMove);
             container.removeEventListener('mousedown', onMove);
-        };
+        });
     });
+
+    return () => cleanupFns.forEach(fn => fn());
   }, []);
 
   return (
@@ -135,22 +184,11 @@ const Home = () => {
           </div>
       </section>
 
-      {/* Press Featured In Ribbon */}
-      <section className="featured-strip">
-          <p>✦ Featured In & As Seen In ✦</p>
-          <div className="featured-logos">
-              <div className="featured-logo-item">VOGUE WEDDINGS</div>
-              <div className="featured-logo-item">THE TIMES OF INDIA</div>
-              <div className="featured-logo-item">WEDMEGOOD</div>
-              <div className="featured-logo-item">ZANKYOU WEDDINGS</div>
-              <div className="featured-logo-item">HINDUSTAN TIMES</div>
-          </div>
-      </section>
 
       {/* About Section */}
       <section className="about" id="about">
           <div className="about-container">
-              <div className="about-img" data-animate>
+              <div className="about-img" data-animate="slide-left">
                   <div className="about-slideshow">
                       <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg" alt="About Slideshow 1" className="active" />
                       <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9" alt="About Slideshow 2" />
@@ -161,7 +199,7 @@ const Home = () => {
                       <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9" alt="About Slideshow 7" />
                   </div>
               </div>
-              <div className="about-content" data-animate>
+              <div className="about-content" data-animate="slide-right">
                   <p className="hero-tagline">✦ Who We Are ✦</p>
                   <h3>Defining Luxury in <br/><span className="gold-text">Every Single Detail</span></h3>
                   <p>Welcome to <strong>Dream Day Events</strong>, your premier partner in luxury event management, premium decor, and gourmet catering. Led by the visionary event designer <strong>Mr. Ayush Kale</strong>, we transform venues into royal spaces, creating rich, premium designs tailored to your desires.</p>
@@ -189,7 +227,7 @@ const Home = () => {
 
       {/* Stats Section */}
       <section className="stats">
-          <div className="stats-container">
+          <div className="stats-container" data-animate data-stagger>
               <div className="stat-item" data-animate>
                   <div className="stat-num" data-target="200" data-suffix="+">0+</div>
                   <div className="stat-label">Events Managed</div>
@@ -215,9 +253,9 @@ const Home = () => {
               <p className="hero-tagline" data-animate data-delay="100ms">✦ Experience the Magic ✦</p>
               <h2 data-animate data-delay="250ms">Cinematic <span className="gold-text">Highlights</span></h2>
           </div>
-          <div className="luxury-video-trio">
+          <div className="luxury-video-trio" data-animate data-stagger>
               {videosData && videosData.slice(0, 3).map((vid, idx) => (
-                  <div className="video-trio-card" id={`trio-player-${idx + 1}`} key={vid.id || idx}>
+                  <div className="video-trio-card" id={`trio-player-${idx + 1}`} key={vid.id || idx} onClick={() => openLightbox('video', vid.src || vid.url)} style={{ cursor: 'pointer' }}>
                       <span className="video-trio-badge">{vid.badge || 'Highlight'}</span>
                       <video autoPlay loop muted playsInline preload="auto" poster={vid.poster} style={{ backgroundImage: `url('${vid.poster}')` }}>
                           <source src={vid.src || vid.url} type="video/mp4" />
@@ -236,42 +274,90 @@ const Home = () => {
           </div>
       </section>
 
-      {/* Services Section */}
-      <section className="services" id="services">
-          <div className="section-header">
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ What We Offer ✦</p>
-              <h2 data-animate data-delay="250ms">Our <span className="gold-text">Bespoke Services</span></h2>
-          </div>
-          <div className="services-grid">
-              <div className="service-card" data-animate>
-                  <div className="service-icon"><i className="fa-solid fa-ring"></i></div>
-                  <h3>Wedding Decor</h3>
-                  <p>Grand stage designs, beautiful mandaps, entrance archways and floral styling that leave a lasting impression.</p>
+      {/* Pinned Horizontal Scrolling Services Section */}
+      <section className="services-pin-wrapper" id="services" ref={horizontalSectionRef}>
+          <div className="services-sticky-container">
+              <div className="section-header" style={{ padding: '0 5%' }}>
+                  <p className="hero-tagline" data-animate data-delay="100ms">✦ What We Offer ✦</p>
+                  <h2 data-animate data-delay="250ms">Our <span className="gold-text">Bespoke Services</span></h2>
               </div>
-              <div className="service-card" data-animate>
-                  <div className="service-icon"><i className="fa-solid fa-palette"></i></div>
-                  <h3>Haldi & Mehndi</h3>
-                  <p>Vibrant, colourful, and custom setups using fresh flowers and unique props matching your traditional themes.</p>
+              
+              <div className="services-horizontal-track" ref={horizontalContentRef} data-animate data-stagger>
+                  {/* Service 1: Wedding Decor */}
+                  <div className="service-card compact-card" data-animate>
+                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg" alt="Wedding Decor" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                      </div>
+                      <div className="service-card-content" style={{ padding: '20px' }}>
+                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-ring"></i></div>
+                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Wedding Decor</h3>
+                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Grand stage designs, beautiful mandaps, entrance archways and floral styling that leave a lasting impression.</p>
+                      </div>
+                  </div>
+                  
+                  {/* Service 2: Haldi & Mehndi Setup */}
+                  <div className="service-card compact-card" data-animate>
+                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/haldi-yellow.jpg" alt="Haldi & Mehndi Setup" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                      </div>
+                      <div className="service-card-content" style={{ padding: '20px' }}>
+                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-palette"></i></div>
+                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Haldi & Mehndi</h3>
+                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Vibrant, colourful, and custom setups using fresh flowers and unique props matching your traditional themes.</p>
+                      </div>
+                  </div>
+
+                  {/* Service 3: Reception Decor */}
+                  <div className="service-card compact-card" data-animate>
+                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg" alt="Reception Decor" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                      </div>
+                      <div className="service-card-content" style={{ padding: '20px' }}>
+                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-champagne-glasses"></i></div>
+                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Reception Decor</h3>
+                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Ultra-modern layouts, ambient lighting setups, elegant drapes, and high-fashion lounges for post-wedding events.</p>
+                      </div>
+                  </div>
+
+                  {/* Service 4: Gourmet Catering */}
+                  <div className="service-card compact-card" data-animate>
+                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg" alt="Gourmet Catering" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                      </div>
+                      <div className="service-card-content" style={{ padding: '20px' }}>
+                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-hotdog"></i></div>
+                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Gourmet Catering</h3>
+                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Exquisite culinary experience with premium serving displays, tailored menus, and professional hospitality staff.</p>
+                      </div>
+                  </div>
+
+                  {/* Service 5: Themed Parties & Birthdays */}
+                  <div className="service-card compact-card" data-animate>
+                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg" alt="Themed Parties & Birthdays" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                      </div>
+                      <div className="service-card-content" style={{ padding: '20px' }}>
+                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-cake-candles"></i></div>
+                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Birthdays & Parties</h3>
+                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Creative themed designs, balloons, and customized decor for kids' birthdays and private social gatherings.</p>
+                      </div>
+                  </div>
+
+                  {/* Service 6: Corporate Galas */}
+                  <div className="service-card compact-card" data-animate>
+                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg" alt="Corporate Galas" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                      </div>
+                      <div className="service-card-content" style={{ padding: '20px' }}>
+                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-briefcase"></i></div>
+                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Corporate Galas</h3>
+                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Professional stage branding, audio-visual coordinate setups, premium conference decor, and awards night arrangements.</p>
+                      </div>
+                  </div>
               </div>
-              <div className="service-card" data-animate>
-                  <div className="service-icon"><i className="fa-solid fa-champagne-glasses"></i></div>
-                  <h3>Receptions</h3>
-                  <p>Ultra-modern layouts, ambient lighting setups, elegant drapes, and high-fashion lounges for post-wedding events.</p>
-              </div>
-              <div className="service-card" data-animate>
-                  <div className="service-icon"><i className="fa-solid fa-hotdog"></i></div>
-                  <h3>Gourmet Catering</h3>
-                  <p>Exquisite culinary experience with premium serving displays, tailored menus, and professional hospitality staff.</p>
-              </div>
-              <div className="service-card" data-animate>
-                  <div className="service-icon"><i className="fa-solid fa-cake-candles"></i></div>
-                  <h3>Birthdays & Parties</h3>
-                  <p>Theme-based designs ranging from sophisticated black & gold to magical, custom-designed setups.</p>
-              </div>
-              <div className="service-card" data-animate>
-                  <div className="service-icon"><i className="fa-solid fa-briefcase"></i></div>
-                  <h3>Corporate Galas</h3>
-                  <p>Professional stage branding, audio-visual coordinate setups, premium conference decor, and awards night arrangements.</p>
+              
+              <div style={{ textAlign: 'center', marginTop: '20px' }} data-animate>
+                  <Link to="/services" className="btn btn-secondary">View All Services</Link>
               </div>
           </div>
       </section>
@@ -284,12 +370,12 @@ const Home = () => {
           </div>
           <div className="ba-grid">
               {/* Transformation 1: Banquet Hall */}
-              <div className="ba-card" data-animate>
+              <div className="ba-card" data-animate="scale-up">
                   <h3>Royal Banquet Makeover</h3>
                   <p>From an empty, plain banquet hall to a breathtaking luxury wedding stage setup.</p>
                   <div className="ba-container" id="ba-hall">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/before-hall.png" className="ba-img before-img" alt="Banquet Hall Before" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9" className="ba-img after-img" alt="Banquet Hall After" />
+                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/before-hall.png" className="ba-img after-img" alt="Banquet Hall Before" />
+                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9" className="ba-img before-img" alt="Banquet Hall After" />
                       <div className="ba-slider-bar"></div>
                       <div className="ba-slider-button"><i className="fa-solid fa-arrows-left-right"></i></div>
                       <span className="ba-label before-label">Before</span>
@@ -298,12 +384,12 @@ const Home = () => {
               </div>
 
               {/* Transformation 2: Open Lawn */}
-              <div className="ba-card" data-animate>
+              <div className="ba-card" data-animate="scale-up">
                   <h3>Royal Outdoor Lawn Styling</h3>
                   <p>From a raw outdoor open space to a premium sky-blue beachside celebration decor.</p>
                   <div className="ba-container" id="ba-lawn">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/before-lawn.png" className="ba-img before-img" alt="Lawn Before" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" className="ba-img after-img" alt="Lawn After" />
+                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/before-lawn.png" className="ba-img after-img" alt="Lawn Before" />
+                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" className="ba-img before-img" alt="Lawn After" />
                       <div className="ba-slider-bar"></div>
                       <div className="ba-slider-button"><i className="fa-solid fa-arrows-left-right"></i></div>
                       <span className="ba-label before-label">Before</span>
@@ -316,12 +402,12 @@ const Home = () => {
       {/* Meet the Manager Section */}
       <section className="manager" id="manager">
           <div className="manager-container">
-              <div className="manager-img-wrapper" data-animate>
+              <div className="manager-img-wrapper" data-animate="blur-in">
                   <div className="manager-img">
                       <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/ayush-kale.jpg" alt="Mr. Ayush Kale" />
                   </div>
               </div>
-              <div className="manager-info" data-animate>
+              <div className="manager-info" data-animate="slide-right">
                   <p className="hero-tagline">✦ The Creative Visionary ✦</p>
                   <h3>Mr. Ayush Kale</h3>
                   <h4 className="manager-title">Founder & Lead Event Manager</h4>
@@ -337,193 +423,205 @@ const Home = () => {
           </div>
       </section>
 
-      {/* Google Reviews Widget Section */}
-      <section className="reviews-section" id="reviews">
-          <div className="section-header">
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ Google Reviews ✦</p>
-              <h2 data-animate data-delay="250ms">Trusted By <span className="gold-text">Hundreds</span></h2>
-          </div>
-          <div className="google-reviews-widget" data-animate>
-              <div className="reviews-header">
-                  <div className="reviews-summary">
-                      <i className="fa-brands fa-google reviews-badge-icon"></i>
-                      <div>
-                          <div className="reviews-rating-value">4.9 / 5.0</div>
-                          <div className="reviews-stars">
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star-half-stroke"></i>
-                          </div>
-                          <div className="reviews-count">Based on 158 verified Google Reviews</div>
-                      </div>
-                  </div>
-                  <a href="https://g.page/r/google-review-link/review" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ fontSize: '0.75rem', padding: '10px 22px' }}>
-                      Write a Review
-                  </a>
+      {/* Testimonials Marquee Section */}
+      <section className="testimonials-section" id="reviews" style={{ overflow: 'hidden', padding: '100px 0' }}>
+          <div className="section-header" style={{ padding: '0 5%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <p style={{ 
+                  fontFamily: "'Cormorant Garamond', serif", 
+                  fontStyle: 'italic', 
+                  color: 'var(--gold-primary)', 
+                  fontSize: '1.4rem', 
+                  margin: '0 0 10px 0' 
+              }}>
+                  Testimonials
+              </p>
+              <div style={{ 
+                  fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', 
+                  fontWeight: '700', 
+                  margin: '0 0 20px 0', 
+                  color: 'var(--text-primary)',
+                  letterSpacing: '0px',
+                  textAlign: 'center',
+                  fontFamily: "'Poppins', sans-serif"
+              }}>
+                  Feedback From Our Clients
               </div>
+              <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '1.1rem', textAlign: 'center' }}>
+                 Real stories from couples and companies who trusted us with their most cherished moments.
+              </p>
+              <div style={{ 
+                  display: 'inline-flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center', 
+                  gap: '15px', 
+                  marginTop: '35px',
+                  padding: '12px 35px',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '50px',
+                  background: 'rgba(212, 175, 55, 0.08)'
+              }}>
+                  <div className="reviews-stars" style={{ color: 'var(--gold-primary)', fontSize: '1.1rem', display: 'flex', gap: '3px' }}>
+                      <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
+                  </div>
+                  <span style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>5.0</span>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>· 200+ happy clients</span>
+              </div>
+          </div>
+
+          <div className="marquee-container" style={{ marginTop: '50px', position: 'relative' }}>
+              {/* Fade gradients for smooth entering/exiting of marquee */}
+              <div className="marquee-fade marquee-fade-left" style={{ position: 'absolute', top: 0, left: 0, width: '150px', height: '100%', zIndex: 2, pointerEvents: 'none' }}></div>
+              <div className="marquee-fade marquee-fade-right" style={{ position: 'absolute', top: 0, right: 0, width: '150px', height: '100%', zIndex: 2, pointerEvents: 'none' }}></div>
               
-              <div className="reviews-grid">
-                  <div className="review-item-card">
-                      <div className="review-user-info">
-                          <div className="review-user-avatar">Amit</div>
-                          <div className="review-user-details">
-                              <h4>Amit Deshpande</h4>
-                              <span>Google Reviewer • Pune</span>
+              <div className="marquee-content">
+                  {[
+                      { name: 'Amit Deshpande', gender: 'boy', text: 'Excellent coordination! Mr. Ayush Kale managed the entire sangeet and catering display flawlessly. The guest comments on the food were incredible!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9' },
+                      { name: 'Neha Kulkarni', gender: 'girl', text: 'They transformed a simple banquet hall into a royal wedding palace. The gold frame elements and fresh flowers were outstanding. Highly recommended luxury planner in Pune!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9' },
+                      { name: 'Rajesh Sen', gender: 'boy', text: 'Top tier professionalism. Easy booking, premium catering setup, and gorgeous lighting design. The team was prompt and executed exactly what we signed on.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9' },
+                      { name: 'Priya Sharma', gender: 'girl', text: 'Dream Day Events made my haldi ceremony look like a movie set. The vibrant yellow themes and floral props were perfect!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9' },
+                      { name: 'Vikram Joshi', gender: 'boy', text: 'Hosted our corporate gala with them. The stage branding and AV setup were top-notch. Our executives were extremely impressed.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg' },
+                      { name: 'Sneha Patel', gender: 'girl', text: 'The reception decor was breathtaking! Ambient lighting, elegant drapes, and the lounge setup added so much class to our night.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg' },
+                      { name: 'Rahul Mehta', gender: 'boy', text: 'Gourmet catering that truly delivers on taste and presentation. Their hospitality staff was courteous and professional.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg' },
+                      { name: 'Anjali Verma', gender: 'girl', text: 'From planning to execution, every detail was handled with precision. Thank you for making our dream day come true.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg' },
+                      { name: 'Siddharth Rao', gender: 'boy', text: 'We had a themed birthday party for our daughter and the balloon decor was so creative and beautifully done. She loved it!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg' },
+                      { name: 'Kavita Iyer', gender: 'girl', text: 'Highly impressed with their outdoor lawn styling. The beachside sky-blue decor for our anniversary was a hit among guests.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg' },
+                      // Duplicate for seamless scroll
+                      { name: 'Amit Deshpande', gender: 'boy', text: 'Excellent coordination! Mr. Ayush Kale managed the entire sangeet and catering display flawlessly. The guest comments on the food were incredible!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9' },
+                      { name: 'Neha Kulkarni', gender: 'girl', text: 'They transformed a simple banquet hall into a royal wedding palace. The gold frame elements and fresh flowers were outstanding. Highly recommended luxury planner in Pune!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9' },
+                      { name: 'Rajesh Sen', gender: 'boy', text: 'Top tier professionalism. Easy booking, premium catering setup, and gorgeous lighting design. The team was prompt and executed exactly what we signed on.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9' },
+                      { name: 'Priya Sharma', gender: 'girl', text: 'Dream Day Events made my haldi ceremony look like a movie set. The vibrant yellow themes and floral props were perfect!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9' },
+                      { name: 'Vikram Joshi', gender: 'boy', text: 'Hosted our corporate gala with them. The stage branding and AV setup were top-notch. Our executives were extremely impressed.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg' },
+                      { name: 'Sneha Patel', gender: 'girl', text: 'The reception decor was breathtaking! Ambient lighting, elegant drapes, and the lounge setup added so much class to our night.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg' },
+                      { name: 'Rahul Mehta', gender: 'boy', text: 'Gourmet catering that truly delivers on taste and presentation. Their hospitality staff was courteous and professional.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg' },
+                      { name: 'Anjali Verma', gender: 'girl', text: 'From planning to execution, every detail was handled with precision. Thank you for making our dream day come true.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg' },
+                      { name: 'Siddharth Rao', gender: 'boy', text: 'We had a themed birthday party for our daughter and the balloon decor was so creative and beautifully done. She loved it!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg' },
+                      { name: 'Kavita Iyer', gender: 'girl', text: 'Highly impressed with their outdoor lawn styling. The beachside sky-blue decor for our anniversary was a hit among guests.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg' }
+                  ].map((r, idx) => (
+                      <div className="review-card" key={idx} style={{
+                          display: 'inline-flex',
+                          flexDirection: 'column',
+                          width: '380px',
+                          margin: '0 15px',
+                          background: 'var(--bg-card)',
+                          borderRadius: '15px',
+                          border: '1px solid var(--border-color)',
+                          whiteSpace: 'normal',
+                          flexShrink: 0,
+                          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+                          overflow: 'hidden',
+                          backdropFilter: 'blur(10px)',
+                          WebkitBackdropFilter: 'blur(10px)'
+                      }}>
+                          {/* Image Top with Fade Gradient */}
+                          <div style={{ position: 'relative', height: '200px', width: '100%' }}>
+                              <img src={r.img} alt={`${r.name}'s event`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <div style={{ position: 'absolute', bottom: -1, left: 0, width: '100%', height: '120px', background: 'linear-gradient(to bottom, transparent, #122443)' }}></div>
+                          </div>
+
+                          <div style={{ padding: '0 25px 25px 25px', display: 'flex', flexDirection: 'column', flexGrow: 1, zIndex: 1, marginTop: '-20px' }}>
+                              {/* Stars */}
+                              <div className="reviews-stars" style={{ color: 'var(--gold-primary)', fontSize: '0.85rem', marginBottom: '15px' }}>
+                                  <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i>
+                              </div>
+
+                              {/* Review Text */}
+                              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '30px', flexGrow: 1, lineHeight: '1.6' }}>
+                                  {r.text}
+                              </p>
+
+                              {/* Bottom Profile & Badge */}
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                      <div style={{ position: 'relative', flexShrink: 0, width: '50px', height: '50px' }}>
+                                          <img 
+                                            src={r.gender === 'boy' ? '/images/boy_avatar.png' : '/images/girl_avatar.png'} 
+                                            alt={`${r.name} profile`} 
+                                            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', background: '#0d1e3d', border: '1px solid var(--border-color)' }} 
+                                          />
+                                          {/* Little overlap icon on avatar */}
+                                          <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', background: 'var(--gold-primary)', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `2px solid var(--bg-secondary)` }}>
+                                              <i className="fa-solid fa-check" style={{ color: '#070d1e', fontSize: '0.55rem', fontWeight: 'bold' }}></i>
+                                          </div>
+                                      </div>
+                                      <div>
+                                          <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: '600' }}>{r.name}</h4>
+                                          <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.6)' }}>Event — Pune</span>
+                                      </div>
+                                  </div>
+
+                                  {/* Verified Badge */}
+                                  <div style={{ background: 'rgba(212, 175, 55, 0.1)', color: 'var(--gold-light)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '5px', border: '1px solid var(--border-color)' }}>
+                                      <i className="fa-solid fa-star" style={{ color: 'var(--gold-primary)', fontSize: '0.65rem' }}></i> Verified
+                                  </div>
+                              </div>
                           </div>
                       </div>
-                      <div className="reviews-stars" style={{ marginBottom: '10px' }}>
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                      </div>
-                      <p className="review-text">"Excellent coordination! Mr. Ayush Kale managed the entire sangeet sadas and catering display flawlessly. The guest comments on the food were incredible!"</p>
-                  </div>
-                  <div className="review-item-card">
-                      <div className="review-user-info">
-                          <div className="review-user-avatar">Neha</div>
-                          <div className="review-user-details">
-                              <h4>Neha Kulkarni</h4>
-                              <span>Local Guide • Pune</span>
-                          </div>
-                      </div>
-                      <div className="reviews-stars" style={{ marginBottom: '10px' }}>
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                      </div>
-                      <p className="review-text">"They transformed a simple banquet hall into a royal wedding palace. The gold frame elements and fresh flowers were outstanding. Highly recommended luxury planner in Pune!"</p>
-                  </div>
-                  <div className="review-item-card">
-                      <div className="review-user-info">
-                          <div className="review-user-avatar">Raj</div>
-                          <div className="review-user-details">
-                              <h4>Rajesh Sen</h4>
-                              <span>Google Reviewer • Maharashtra</span>
-                          </div>
-                      </div>
-                      <div className="reviews-stars" style={{ marginBottom: '10px' }}>
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                      </div>
-                      <p className="review-text">"Top tier professionalism. Easy booking, premium catering setup, and gorgeous lighting design. The team was prompt and executed exactly what we signed on."</p>
-                  </div>
+                  ))}
               </div>
           </div>
       </section>
 
-      {/* Testimonials removed as per user request */}
-
       {/* Contact Section */}
-      <section className="contact" id="contact">
-          <div className="section-header">
+      <section className="contact" id="contact" style={{ padding: '80px 5%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
               <p className="hero-tagline" data-animate data-delay="100ms">✦ Get In Touch ✦</p>
               <h2 data-animate data-delay="250ms">Plan Your <span className="gold-text">Celebration</span></h2>
+              <p data-animate data-delay="300ms" style={{ color: 'var(--text-secondary)', marginTop: '10px' }}>Fill out the form below and we'll get back to you shortly.</p>
           </div>
-          <div className="contact-container">
-              <div className="contact-form-wrapper" data-animate>
-                  <form id="contact-form">
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="name">Your Name</label>
-                              <input type="text" id="name" className="form-control" required placeholder="Enter your full name" />
-                          </div>
-                          <div className="form-group">
-                              <label htmlFor="email">Email Address</label>
-                              <input type="email" id="email" className="form-control" required placeholder="Enter your email" />
-                          </div>
+          
+          <div data-animate="fade-up" style={{
+              width: '100%',
+              maxWidth: '900px',
+              background: 'var(--bg-card)',
+              borderRadius: '20px',
+              border: '1px solid var(--border-color)',
+              padding: '40px',
+              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)'
+          }}>
+              <form id="contact-form" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <input type="text" id="name" required placeholder="Full Name" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
                       </div>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="phone">Phone Number</label>
-                              <input type="tel" id="phone" className="form-control" required placeholder="Enter your phone number" />
-                          </div>
-                          <div className="form-group">
-                              <label htmlFor="event-type">Event Type</label>
-                              <select id="event-type" className="form-control" required defaultValue="">
-                                  <option value="" disabled>Select event category</option>
-                                  <option value="wedding">Wedding Decoration & Stage</option>
-                                  <option value="haldi">Haldi & Mehndi Setup</option>
-                                  <option value="reception">Reception Decor</option>
-                                  <option value="catering">Gourmet Catering Services</option>
-                                  <option value="birthday">Birthday or Theme Party</option>
-                                  <option value="corporate">Corporate Event</option>
-                                  <option value="other">Other Celebration</option>
-                              </select>
-                          </div>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <input type="tel" id="phone" required placeholder="Phone Number" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
                       </div>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="date">Event Date</label>
-                              <input type="date" id="date" className="form-control" required />
-                          </div>
-                          <div className="form-group">
-                              <label htmlFor="venue">Event Venue (if known)</label>
-                              <input type="text" id="venue" className="form-control" placeholder="Enter venue name or city" />
-                          </div>
-                      </div>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="guest-count-form">Approximate Guest Count</label>
-                              <input type="number" id="guest-count-form" className="form-control" placeholder="e.g., 150" min="1" />
-                          </div>
-                          <div className="form-group">
-                              <label htmlFor="budget">Budget Range</label>
-                              <select id="budget" className="form-control" defaultValue="">
-                                  <option value="" disabled>Select budget range</option>
-                                  <option value="under-50k">Under ₹50,000</option>
-                                  <option value="50k-1l">₹50,000 - ₹1,00,000</option>
-                                  <option value="1l-2l">₹1,00,000 - ₹2,00,000</option>
-                                  <option value="2l-5l">₹2,00,000 - ₹5,00,000</option>
-                                  <option value="above-5l">Above ₹5,00,000</option>
-                              </select>
-                          </div>
-                      </div>
-                      <div className="form-group">
-                          <label htmlFor="message">Message / Special Requirements</label>
-                          <textarea id="message" className="form-control" placeholder="Describe your vision, decor preferences, theme ideas, or other special requirements..."></textarea>
-                      </div>
-                      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
-                          <button type="button" className="btn btn-primary" onClick={() => alert('Submit logic ported to React')}>Send Email</button>
-                          <button type="button" id="whatsapp-submit-btn" className="btn btn-secondary" style={{ background: '#25d366', color: 'white', border: '1px solid #25d366' }}>
-                              <i className="fa-brands fa-whatsapp" style={{ marginRight: '8px' }}></i>Inquire on WhatsApp
-                          </button>
-                      </div>
-                  </form>
-              </div>
-              
-              <div className="contact-info-wrapper" data-animate>
-                  <div>
-                      <div className="info-item">
-                          <div className="info-icon"><i className="fa-solid fa-phone"></i></div>
-                          <div className="info-text">
-                              <h4>Call or WhatsApp Us</h4>
-                              <p>+91 84593 98321</p>
-                          </div>
-                      </div>
-                      <div className="info-item">
-                          <div className="info-icon"><i className="fa-solid fa-envelope"></i></div>
-                          <div className="info-text">
-                              <h4>Email Enquiries</h4>
-                              <p>Ayushkale0412@gmail.com</p>
-                          </div>
-                      </div>
-                      <div className="info-item">
-                          <div className="info-icon"><i className="fa-solid fa-location-dot"></i></div>
-                          <div className="info-text">
-                              <h4>Office Address</h4>
-                              <p>Premium Plaza, Suite 402, Senapati Bapat Road, Pune, Maharashtra - 411016</p>
-                          </div>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <input type="email" id="email" required placeholder="Email Address" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
                       </div>
                   </div>
 
-                  <div className="map-placeholder">
-                      <iframe 
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1891.5975618451877!2d73.8299839!3d18.5308225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf70d8a0d0a5%3A0xe441618a38c23e65!2sSenapati%20Bapat%20Rd%2C%20Pune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin" 
-                          allowFullScreen="" 
-                          loading="lazy" 
-                          referrerPolicy="no-referrer-when-downgrade"
-                          title="Google Maps Location"
-                          style={{ border: 0, width: '100%', height: '100%' }}>
-                      </iframe>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <select id="event-type" required defaultValue="" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }}>
+                              <option value="" disabled>Event Type</option>
+                              <option value="wedding">Wedding Decoration & Stage</option>
+                              <option value="haldi">Haldi & Mehndi Setup</option>
+                              <option value="corporate">Corporate Event</option>
+                              <option value="other">Other Celebration</option>
+                          </select>
+                      </div>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <input type="date" id="date" required style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-secondary)' }} />
+                      </div>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <input type="number" id="guest-count-form" placeholder="Guest Count" min="1" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
+                      </div>
                   </div>
-              </div>
+
+                  <div className="form-group" style={{ margin: 0 }}>
+                      <textarea id="message" placeholder="Message / Special Requirements..." style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)', height: '120px', resize: 'vertical' }}></textarea>
+                  </div>
+                  
+                  <div style={{ display: 'flex', gap: '20px', marginTop: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                      <button type="button" className="btn btn-primary" onClick={() => alert('Submit logic ported to React')} style={{ padding: '15px 40px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '30px', minWidth: '200px' }}>Submit Request</button>
+                      <button type="button" id="whatsapp-submit-btn" className="btn btn-secondary" style={{ background: '#25d366', color: 'white', border: '1px solid #25d366', padding: '15px 40px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '30px', minWidth: '200px' }}>
+                          <i className="fa-brands fa-whatsapp" style={{ marginRight: '8px' }}></i>WhatsApp Us
+                      </button>
+                  </div>
+              </form>
           </div>
       </section>
 
