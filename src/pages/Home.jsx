@@ -401,7 +401,7 @@ const Home = () => {
                   <h3>Mr. Ayush Kale</h3>
                   <h4 className="manager-title">Founder & Lead Event Manager</h4>
                   <p className="manager-bio">"An event is not just a date on a calendar; it is a canvas of emotions, beauty, and memories. At Dream Day Events, we bring your visual imagination to life. We believe in providing the absolute best in class aesthetics and flawless execution so you can enjoy your dream day without a worry."</p>
-                  <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under Mr. Ayush Kale's creative direction, Dream Day Events has successfully coordinated over 200 premium weddings and corporate galas, bringing 8+ years of expertise to every single detail.</p>
+                  <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under Mr. Ayush Kale's creative direction, Dream Day Events has successfully coordinated over 500+ premium weddings and corporate galas, bringing 9+ years of expertise to every single detail.</p>
                   <div className="manager-socials">
                       <a href="https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
 

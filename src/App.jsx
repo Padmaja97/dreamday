@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import GlobalDecorations from './components/GlobalDecorations';
+import ScrollToTop from './components/ScrollToTop';
 
 // Import Pages (will be created next)
 import Home from './pages/Home';
@@ -29,6 +30,7 @@ function App() {
     <DataProvider>
       <LightboxProvider>
         <Router>
+          <ScrollToTop />
           <GlobalDecorations />
           <CustomCursor />
           <Navbar />

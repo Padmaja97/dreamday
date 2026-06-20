@@ -18,13 +18,18 @@ const Manager = () => {
   if (!data.imageUrl) {
     data.imageUrl = defaultData.imageUrl;
   }
+  
+  // Fix duplicate name issue from database if it exists
+  if (data.name === 'Mr. Ayush KaleMr. Ayush Kale' || data.name.includes('Ayush KaleMr')) {
+    data.name = 'Mr. Ayush Kale';
+  }
 
   return (
     <main>
       {/* Manager Page Hero Banner */}
       <header className="portfolio-hero" style={{ backgroundImage: `linear-gradient(135deg, rgba(30, 80, 150, 0.2) 0%, rgba(10, 25, 60, 0.6) 100%), url('${data.imageUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '120px 5% 60px 5%', textAlign: 'center', borderBottom: '1px solid var(--border-color)' }}>
           <p className="hero-tagline" data-animate data-delay="100ms">✦ Creative Direction ✦</p>
-          <h2 data-animate data-delay="250ms">Meet <span className="gold-text">{data.name.split(' ').slice(-2).join(' ')}</span></h2>
+          <h2 data-animate data-delay="250ms">Meet <span className="gold-text">{data.name}</span></h2>
           <p data-animate data-delay="400ms" style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto', marginTop: '15px' }}>The visionary designer, founder, and lead curator of Pune's royal setups.</p>
       </header>
       
@@ -37,10 +42,10 @@ const Manager = () => {
               </div>
               <div className="manager-info" data-animate>
                   <p className="hero-tagline">✦ The Creative Visionary ✦</p>
-                  <h3>{data.name}</h3>
+
                   <h4 className="manager-title">{data.title || 'Founder & Lead Event Manager'}</h4>
                   <p className="manager-bio">"{data.bio}"</p>
-                  <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under {data.name}'s creative direction, Dream Day Events has successfully coordinated over 200 premium weddings and corporate galas, bringing 8+ years of expertise to every single detail.</p>
+                  <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under {data.name}'s creative direction, Dream Day Events has successfully coordinated over 500+ premium weddings and corporate galas, bringing 9+ years of expertise to every single detail.</p>
                   <div className="manager-socials">
                       <a href="https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
 
