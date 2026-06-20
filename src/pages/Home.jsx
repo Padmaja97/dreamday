@@ -386,42 +386,7 @@ const Home = () => {
           </div>
       </section>
 
-      {/* Before & After Transformations Section */}
-      <section className="ba-section" id="transformations">
-          <div className="section-header">
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ Magic Makeovers ✦</p>
-              <h2 data-animate data-delay="250ms">Venue <span className="gold-text">Transformations</span></h2>
-          </div>
-          <div className="ba-grid">
-              {/* Transformation 1: Banquet Hall */}
-              <div className="ba-card" data-animate="scale-up">
-                  <h3>Royal Banquet Makeover</h3>
-                  <p>From an empty, plain banquet hall to a breathtaking luxury wedding stage setup.</p>
-                  <div className="ba-container" id="ba-hall">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/before-hall.png" className="ba-img after-img" alt="Banquet Hall Before" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9" className="ba-img before-img" alt="Banquet Hall After" />
-                      <div className="ba-slider-bar"></div>
-                      <div className="ba-slider-button"><i className="fa-solid fa-arrows-left-right"></i></div>
-                      <span className="ba-label before-label">Before</span>
-                      <span className="ba-label after-label">After</span>
-                  </div>
-              </div>
 
-              {/* Transformation 2: Open Lawn */}
-              <div className="ba-card" data-animate="scale-up">
-                  <h3>Royal Outdoor Lawn Styling</h3>
-                  <p>From a raw outdoor open space to a premium sky-blue beachside celebration decor.</p>
-                  <div className="ba-container" id="ba-lawn">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/before-lawn.png" className="ba-img after-img" alt="Lawn Before" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" className="ba-img before-img" alt="Lawn After" />
-                      <div className="ba-slider-bar"></div>
-                      <div className="ba-slider-button"><i className="fa-solid fa-arrows-left-right"></i></div>
-                      <span className="ba-label before-label">Before</span>
-                      <span className="ba-label after-label">After</span>
-                  </div>
-              </div>
-          </div>
-      </section>
 
       {/* Meet the Manager Section */}
       <section className="manager" id="manager">
