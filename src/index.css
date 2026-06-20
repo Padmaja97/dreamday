@@ -1,5 +1,5 @@
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap');
 
 :root {
     /* Dark Theme Variables (Default - Vibrant Navy/Light Blue Theme) */
@@ -3707,3 +3707,14 @@ body.light-mode .marquee-fade-right {
         padding: 8px 12px !important;
     }
 }
+
+@media (max-width: 768px) {
+    .hero-floating-img {
+        opacity: 0.15 !important;
+        z-index: 1 !important;
+    }
+    .hero-main-title {
+        z-index: 4 !important;
+    }
+}
+

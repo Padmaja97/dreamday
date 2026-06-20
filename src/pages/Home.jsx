@@ -175,10 +175,29 @@ const Home = () => {
               <source src="/images/video-2.mp4" type="video/mp4" />
           </video>
           <div className="luxury-frame" style={{ zIndex: 2 }}></div>
-          <div className="hero-content" style={{ zIndex: 2 }}>
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ 500+ EVENTS CRAFTED | 10+ YEARS OF EXCELLENCE ✦</p>
-              <h2 className="hero-title" data-animate data-delay="300ms">Timeless Events, <br/><span className="gold-text">Exquisitely Crafted.</span></h2>
-              <p className="hero-subtitle" data-animate data-delay="500ms">Where heritage meets high-design. We curate atmosphere, detail, and emotion into Pune's finest celebrations.</p>
+          <div className="hero-content" style={{ zIndex: 2, position: 'relative', width: '100%', maxWidth: '1300px', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              
+              {/* Top Right Image */}
+              <div className="hero-floating-img" data-animate="blur-in" data-delay="200ms" style={{ position: 'absolute', top: 'clamp(110px, 15%, 150px)', right: 'clamp(10px, 5%, 50px)', width: 'clamp(130px, 18vw, 240px)', transform: 'rotate(6deg)', borderRadius: '12px', overflow: 'hidden', border: '3px solid var(--gold-light)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', zIndex: 3 }}>
+                  <img src="/images/image copy.png" alt="Wedding Ceremony" style={{ width: '100%', height: 'auto', display: 'block' }} />
+              </div>
+
+              {/* Main Center Text */}
+              <h1 className="hero-main-title" data-animate="zoom-rotate" data-delay="100ms" style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.5rem, 5.5vw, 5.2rem)', fontStyle: 'italic', fontWeight: '700', textAlign: 'center', color: '#FDFBF7', filter: 'drop-shadow(3px 5px 12px rgba(0,0,0,0.85))', lineHeight: '1.2', zIndex: 4, letterSpacing: '1px', padding: '0 15px' }}>
+                  Khushiyaan Aapki,<br/>Jimmedari Humari
+              </h1>
+
+              {/* Bottom Left Image */}
+              <div className="hero-floating-img" data-animate="blur-in" data-delay="300ms" style={{ position: 'absolute', bottom: 'clamp(60px, 12%, 120px)', left: 'clamp(10px, 5%, 50px)', width: 'clamp(130px, 18vw, 240px)', transform: 'rotate(-6deg)', borderRadius: '12px', overflow: 'hidden', border: '3px solid var(--gold-light)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', zIndex: 3 }}>
+                  <img src="/images/image.png" alt="Wedding Rituals" style={{ width: '100%', height: 'auto', display: 'block' }} />
+              </div>
+
+              {/* Bottom Right Text */}
+              <div className="hero-bottom-text" data-animate="slide-right" data-delay="400ms" style={{ position: 'absolute', bottom: '15%', right: '2%', maxWidth: '320px', textAlign: 'left', zIndex: 3 }}>
+                  <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: '#E2E8F0', textShadow: '1px 2px 8px rgba(0,0,0,0.9)', lineHeight: '1.8', fontWeight: '300', margin: 0, letterSpacing: '0.5px' }}>
+                      Turning your special moments into unforgettable celebrations with creativity, precision, and professionalism.
+                  </p>
+              </div>
           </div>
           <div className="scroll-indicator">
               <a href="#about"><i className="fa-solid fa-chevron-down"></i></a>
