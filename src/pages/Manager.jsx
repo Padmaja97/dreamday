@@ -43,7 +43,7 @@ const Manager = () => {
                   <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under {data.name}'s creative direction, Dream Day Events has successfully coordinated over 200 premium weddings and corporate galas, bringing 8+ years of expertise to every single detail.</p>
                   <div className="manager-socials">
                       <a href="https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
-                      <a href="#" className="social-icon" aria-label="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
+
                       <a href="#" className="social-icon" aria-label="LinkedIn"><i className="fa-brands fa-linkedin-in"></i></a>
                       <a href="https://wa.me/918459398321?text=Hi%20Ayush%2C%20I%20would%20like%20to%20discuss%20decorating%20for%20my%20upcoming%20event." target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="WhatsApp"><i className="fa-brands fa-whatsapp"></i></a>
                   </div>
