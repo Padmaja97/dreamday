@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const Inquire = () => {
   useScrollAnimation();
@@ -20,14 +22,22 @@ const Inquire = () => {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-    // In a real app, send data to backend here
-    setFormData({
-      name: '', phone: '', eventType: '', date: '', location: '', message: ''
-    });
+    try {
+      await addDoc(collection(db, 'inquiries'), {
+        ...formData,
+        createdAt: serverTimestamp()
+      });
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+      setFormData({
+        name: '', phone: '', eventType: '', date: '', location: '', message: ''
+      });
+    } catch (error) {
+      console.error("Error submitting inquiry: ", error);
+      alert("There was an error submitting your inquiry. Please try again.");
+    }
   };
 
   const handleWhatsApp = () => {

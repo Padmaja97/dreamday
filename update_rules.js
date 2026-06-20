@@ -12,6 +12,9 @@ const firestoreRules = `
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /inquiries/{inquiryId} {
+      allow create: if true;
+    }
     match /{document=**} {
       allow read: if true;
       allow write: if request.auth != null;

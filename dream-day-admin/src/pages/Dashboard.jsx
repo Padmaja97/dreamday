@@ -17,16 +17,18 @@ import LoadingSpinner from '../components/LoadingSpinner';
 export default function Dashboard() {
   const { currentUser } = useAuth();
   const [stats, setStats] = useState(null);
+  const [managerName, setManagerName] = useState('Admin');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [inquiriesSnap, gallerySnap, packagesSnap, videosSnap] = await Promise.all([
+        const [inquiriesSnap, gallerySnap, packagesSnap, videosSnap, managerSnap] = await Promise.all([
           getDocs(collection(db, 'inquiries')),
           getDoc(doc(db, 'content', 'gallery')),
           getDoc(doc(db, 'content', 'packages')),
           getDoc(doc(db, 'content', 'videos')),
+          getDoc(doc(db, 'content', 'manager')),
         ]);
 
         const galleryImages = gallerySnap.exists() ? (gallerySnap.data().images?.length || 0) : 0;
@@ -39,6 +41,10 @@ export default function Dashboard() {
           packages: packageCount,
           videos: videoCount,
         });
+
+        if (managerSnap.exists()) {
+          setManagerName(managerSnap.data().name || 'Admin');
+        }
       } catch (err) {
         console.error('Error fetching stats:', err);
         setStats({ inquiries: 0, gallery: 0, packages: 0, videos: 0 });
@@ -77,7 +83,7 @@ export default function Dashboard() {
             <span className="text-sm font-medium text-accent">Welcome back</span>
           </div>
           <h1 className="text-2xl lg:text-3xl font-bold text-text-primary tracking-tight">
-            {currentUser?.email?.split('@')[0] || 'Admin'}
+            {managerName}
           </h1>
           <p className="text-sm text-text-secondary mt-1">{today}</p>
         </div>

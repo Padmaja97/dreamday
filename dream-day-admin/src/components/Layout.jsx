@@ -11,7 +11,9 @@ import {
   Menu,
   X,
   Crown,
-  Video
+  Video,
+  Image,
+  Users
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -20,6 +22,8 @@ const navigation = [
   { name: 'Pricing', href: '/prices', icon: DollarSign },
   { name: 'Gallery', href: '/gallery', icon: ImageIcon },
   { name: 'Videos', href: '/videos', icon: Video },
+  { name: 'Hero', href: '/hero', icon: Image },
+  { name: 'About', href: '/about', icon: Users },
   { name: 'Manager', href: '/manager', icon: User },
   { name: 'Inquiries', href: '/inquiries', icon: Mail },
 ];
@@ -29,6 +33,8 @@ const pageTitles = {
   '/prices': 'Pricing',
   '/gallery': 'Gallery',
   '/videos': 'Video Highlights',
+  '/hero': 'Hero Section',
+  '/about': 'About Section',
   '/manager': 'Manager',
   '/testimonials': 'Testimonials',
   '/inquiries': 'Inquiries',

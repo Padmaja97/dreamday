@@ -6,17 +6,78 @@ const Packages = () => {
   useScrollAnimation();
   const { packagesData } = useData();
 
-  const defaultPrices = {
-    royalStage: 80000,
-    entranceArch: 30000,
-    saffronMandap: 50000,
-    haldiSwing: 20000,
-    ledWall: 40000,
-    ambientLight: 25000,
-    cateringToggle: 800 // per guest
-  };
+  const fallbackPackages = [
+    {
+      id: "pkg-1",
+      tag: "Premium Choice",
+      name: "Royal Elite Wedding Stage",
+      price: 150000,
+      period: "Starting",
+      isFeatured: false,
+      features: [
+        "Grand 40ft Stage Backdrop Setup",
+        "Fresh and Silk Floral Arches",
+        "Royal Maharaja Couch / Sofa Seating",
+        "Walkway Red Carpet & Light Pillars",
+        "Elegant Selfie Photo Booth Spot",
+        "Custom 3D Monogram & Cold Pyro Entry",
+        "Complete Ambient LED Venue Lighting"
+      ]
+    },
+    {
+      id: "pkg-2",
+      tag: "Most Popular",
+      name: "Vibrant Shahnaz Haldi",
+      price: 60000,
+      period: "Starting",
+      isFeatured: true,
+      features: [
+        "Traditional Yellow/Pink Silk Draping",
+        "Decorated Wooden swing Setup",
+        "Cascading Heavy Marigold Garlands",
+        "Brass Vessels & Ceremonial Urali Bowl",
+        "Festive Guest Seating Cushions & Mats",
+        "Sound System for Traditional Sangeet",
+        "Haldi Photo backdrop Props"
+      ]
+    },
+    {
+      id: "pkg-3",
+      tag: "Corporate Elite",
+      name: "Imperial Gala Stage",
+      price: 120000,
+      period: "Starting",
+      isFeatured: false,
+      features: [
+        "Modern Panel Staging & Matte Flooring",
+        "High-Def LED Wall Backdrop Integration",
+        "Professional Truss and Spotlight Rigs",
+        "Elite VIP Seating Sofa Lounge Setup",
+        "Registration Counter & Media Wall Decor",
+        "Luxury Centerpieces for Banquet Tables",
+        "Sound System & Wireless Podium Mics"
+      ]
+    },
+    {
+      id: "pkg-4",
+      tag: "Gourmet Feasts",
+      name: "Signature Catering",
+      price: 800,
+      period: "Per Plate",
+      isFeatured: false,
+      features: [
+        "Tailored Veg & Non-Veg Multi-Cuisine",
+        "Luxury 5-Star Buffet Layout Presentation",
+        "3 Live Food Counters (Chat, Pasta, etc.)",
+        "Premium Mocktails & Welcome Drinks Bar",
+        "Royal Dessert Display & Hot Jalebi Counter",
+        "Professional Uniformed Service Staff",
+        "Full Banquet Table Setting & Clean Cutlery"
+      ]
+    }
+  ];
 
-  const prices = { ...defaultPrices, ...(packagesData || {}) };
+  const packagesList = Array.isArray(packagesData?.items) ? packagesData.items : fallbackPackages;
 
   return (
     <main>
@@ -30,105 +91,27 @@ const Packages = () => {
       {/* Pricing Packages Section */}
       <section className="packages-section" style={{ paddingTop: '50px' }}>
           <div className="packages-grid" data-animate data-stagger>
-              {/* Package 1 */}
-              <div className="package-card" data-animate>
-                  <div className="package-header">
-                      <span className="package-tag">Premium Choice</span>
-                      <h3>Royal Elite Wedding Stage</h3>
-                      <div className="package-price">
-                          <span className="currency">₹</span>
-                          <span className="amount">{(prices.royalStage + prices.entranceArch + prices.ledWall).toLocaleString('en-IN')}</span>
-                          <span className="period">Starting</span>
+              {packagesList.map((pkg, index) => (
+                  <div key={pkg.id || index} className={`package-card ${pkg.isFeatured ? 'featured-card' : ''}`} data-animate>
+                      <div className="package-header">
+                          <span className="package-tag" style={pkg.isFeatured ? { background: 'var(--gold-gradient)', color: '#070d1e' } : {}}>{pkg.tag}</span>
+                          <h3>{pkg.name}</h3>
+                          <div className="package-price">
+                              <span className="currency">₹</span>
+                              <span className="amount">{Number(pkg.price).toLocaleString('en-IN')}</span>
+                              <span className="period">{pkg.period}</span>
+                          </div>
+                      </div>
+                      <ul className="package-features">
+                          {pkg.features.map((feature, i) => (
+                              <li key={i}><i className="fa-solid fa-check"></i> {feature}</li>
+                          ))}
+                      </ul>
+                      <div className="package-footer">
+                          <a href={`https://wa.me/918459398321?text=${encodeURIComponent(`Hi! I am interested in your *${pkg.name}* (${pkg.period} at ₹${Number(pkg.price).toLocaleString('en-IN')}). Please share details.`)}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary package-btn" style={pkg.isFeatured ? { background: 'var(--gold-gradient)', color: '#070d1e' } : {}}>Book on WhatsApp</a>
                       </div>
                   </div>
-                  <ul className="package-features">
-                      <li><i className="fa-solid fa-check"></i> Grand 40ft Stage Backdrop Setup</li>
-                      <li><i className="fa-solid fa-check"></i> Fresh and Silk Floral Arches</li>
-                      <li><i className="fa-solid fa-check"></i> Royal Maharaja Couch / Sofa Seating</li>
-                      <li><i className="fa-solid fa-check"></i> Walkway Red Carpet & Light Pillars</li>
-                      <li><i className="fa-solid fa-check"></i> Elegant Selfie Photo Booth Spot</li>
-                      <li><i className="fa-solid fa-check"></i> Custom 3D Monogram & Cold Pyro Entry</li>
-                      <li><i className="fa-solid fa-check"></i> Complete Ambient LED Venue Lighting</li>
-                  </ul>
-                  <div className="package-footer">
-                      <a href="https://wa.me/918459398321?text=Hi%21%20I%20am%20interested%20in%20your%20*Royal%20Elite%20Wedding%20Stage%20Package*%20%28Starting%20at%20%E2%82%B91%2C50%2C000%29.%20Please%20share%20details." target="_blank" rel="noopener noreferrer" className="btn btn-primary package-btn">Book on WhatsApp</a>
-                  </div>
-              </div>
-
-              {/* Package 2 */}
-              <div className="package-card featured-card" data-animate>
-                  <div className="package-header">
-                      <span className="package-tag" style={{ background: 'var(--gold-gradient)', color: '#070d1e' }}>Most Popular</span>
-                      <h3>Vibrant Shahnaz Haldi</h3>
-                      <div className="package-price">
-                          <span className="currency">₹</span>
-                          <span className="amount">{(prices.haldiSwing + 40000).toLocaleString('en-IN')}</span>
-                          <span className="period">Starting</span>
-                      </div>
-                  </div>
-                  <ul className="package-features">
-                      <li><i className="fa-solid fa-check"></i> Traditional Yellow/Pink Silk Draping</li>
-                      <li><i className="fa-solid fa-check"></i> Decorated Wooden swing Setup</li>
-                      <li><i className="fa-solid fa-check"></i> Cascading Heavy Marigold Garlands</li>
-                      <li><i className="fa-solid fa-check"></i> Brass Vessels & Ceremonial Urali Bowl</li>
-                      <li><i className="fa-solid fa-check"></i> Festive Guest Seating Cushions & Mats</li>
-                      <li><i className="fa-solid fa-check"></i> Sound System for Traditional Sangeet</li>
-                      <li><i className="fa-solid fa-check"></i> Haldi Photo backdrop Props</li>
-                  </ul>
-                  <div className="package-footer">
-                      <a href="https://wa.me/918459398321?text=Hi%21%20I%20am%20interested%20in%20your%20*Vibrant%20Shahnaz%20Haldi%20Package*%20%28Starting%20at%20%E2%82%B960%2C000%29.%20Please%20share%20details." target="_blank" rel="noopener noreferrer" className="btn btn-primary package-btn" style={{ background: 'var(--gold-gradient)', color: '#070d1e' }}>Book on WhatsApp</a>
-                  </div>
-              </div>
-
-              {/* Package 3 */}
-              <div className="package-card" data-animate>
-                  <div className="package-header">
-                      <span className="package-tag">Corporate Elite</span>
-                      <h3>Imperial Gala Stage</h3>
-                      <div className="package-price">
-                          <span className="currency">₹</span>
-                          <span className="amount">{(prices.royalStage + prices.ledWall).toLocaleString('en-IN')}</span>
-                          <span className="period">Starting</span>
-                      </div>
-                  </div>
-                  <ul className="package-features">
-                      <li><i className="fa-solid fa-check"></i> Modern Panel Staging & Matte Flooring</li>
-                      <li><i className="fa-solid fa-check"></i> High-Def LED Wall Backdrop Integration</li>
-                      <li><i className="fa-solid fa-check"></i> Professional Truss and Spotlight Rigs</li>
-                      <li><i className="fa-solid fa-check"></i> Elite VIP Seating Sofa Lounge Setup</li>
-                      <li><i className="fa-solid fa-check"></i> Registration Counter & Media Wall Decor</li>
-                      <li><i className="fa-solid fa-check"></i> Luxury Centerpieces for Banquet Tables</li>
-                      <li><i className="fa-solid fa-check"></i> Sound System & Wireless Podium Mics</li>
-                  </ul>
-                  <div className="package-footer">
-                      <a href="https://wa.me/918459398321?text=Hi%21%20I%20am%20interested%20in%20your%20*Imperial%20Gala%20Corporate%20Package*%20%28Starting%20at%20%E2%82%B91%2C20%2C000%29.%20Please%20share%20details." target="_blank" rel="noopener noreferrer" className="btn btn-primary package-btn">Book on WhatsApp</a>
-                  </div>
-              </div>
-
-              {/* Package 4 */}
-              <div className="package-card" data-animate>
-                  <div className="package-header">
-                      <span className="package-tag">Gourmet Feasts</span>
-                      <h3>Signature Catering</h3>
-                      <div className="package-price">
-                          <span className="currency">₹</span>
-                          <span className="amount">{prices.cateringToggle.toLocaleString('en-IN')}</span>
-                          <span className="period">Per Plate</span>
-                      </div>
-                  </div>
-                  <ul className="package-features">
-                      <li><i className="fa-solid fa-check"></i> Tailored Veg & Non-Veg Multi-Cuisine</li>
-                      <li><i className="fa-solid fa-check"></i> Luxury 5-Star Buffet Layout Presentation</li>
-                      <li><i className="fa-solid fa-check"></i> 3 Live Food Counters (Chat, Pasta, etc.)</li>
-                      <li><i className="fa-solid fa-check"></i> Premium Mocktails & Welcome Drinks Bar</li>
-                      <li><i className="fa-solid fa-check"></i> Royal Dessert Display & Hot Jalebi Counter</li>
-                      <li><i className="fa-solid fa-check"></i> Professional Uniformed Service Staff</li>
-                      <li><i className="fa-solid fa-check"></i> Full Banquet Table Setting & Clean Cutlery</li>
-                  </ul>
-                  <div className="package-footer">
-                      <a href="https://wa.me/918459398321?text=Hi%21%20I%20am%20interested%20in%20your%20*Signature%20Gourmet%20Catering*%20%28Starting%20at%20%E2%82%B9800%20per%20plate%29.%20Please%20share%20details." target="_blank" rel="noopener noreferrer" className="btn btn-primary package-btn">Book on WhatsApp</a>
-                  </div>
-              </div>
+              ))}
           </div>
 
       </section>

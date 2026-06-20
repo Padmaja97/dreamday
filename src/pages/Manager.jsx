@@ -44,7 +44,7 @@ const Manager = () => {
                   <p className="hero-tagline">✦ The Creative Visionary ✦</p>
                   <h3>{data.name}</h3>
                   <h4 className="manager-title">{data.title || 'Founder & Lead Event Manager'}</h4>
-                  <p className="manager-bio">"Make Your Dream Day Come True with Dream Day Events"</p>
+                  <p className="manager-bio">{data.bio}</p>
                   <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under {data.name}'s creative direction, Dream Day Events has successfully coordinated over 500+ premium weddings and corporate galas, bringing 9+ years of expertise to every single detail.</p>
                   <div className="manager-socials">
                       <a href="https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>

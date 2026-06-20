@@ -3,10 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
 import { useLightbox } from '../utils/LightboxContext';
 import { useData } from '../context/DataContext';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const Home = () => {
   useScrollAnimation();
   const location = useLocation();
+  const { managerData, heroData, aboutData } = useData();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -24,13 +27,22 @@ const Home = () => {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-    setFormData({
-      name: '', phone: '', eventType: '', date: '', location: '', message: ''
-    });
+    try {
+      await addDoc(collection(db, 'inquiries'), {
+        ...formData,
+        createdAt: serverTimestamp()
+      });
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+      setFormData({
+        name: '', phone: '', eventType: '', date: '', location: '', message: ''
+      });
+    } catch (error) {
+      console.error("Error submitting inquiry: ", error);
+      alert("There was an error submitting your inquiry. Please try again.");
+    }
   };
 
   const handleWhatsApp = () => {
@@ -58,6 +70,24 @@ const Home = () => {
   }, [location]);
 
   const { openLightbox } = useLightbox();
+
+  const defaultData = {
+    name: 'Mr. Ayush Kale',
+    title: 'Founder & Lead Event Manager',
+    bio: "An event is not just a date on a calendar; it is a canvas of emotions, beauty, and memories. At Dream Day Events, we bring your visual imagination to life. We believe in providing the absolute best in class aesthetics and flawless execution so you can enjoy your dream day without a worry.",
+    imageUrl: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/ayush-kale.jpg"
+  };
+
+  const data = { ...defaultData, ...(managerData || {}) };
+  // Ensure we always have an image even if managerData.imageUrl is empty
+  if (!data.imageUrl) {
+    data.imageUrl = defaultData.imageUrl;
+  }
+  
+  // Fix duplicate name issue from database if it exists
+  if (data.name === 'Mr. Ayush KaleMr. Ayush Kale' || data.name.includes('Ayush KaleMr')) {
+    data.name = 'Mr. Ayush Kale';
+  }
   const { videosData } = useData();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
@@ -208,9 +238,9 @@ const Home = () => {
     <main>
 
       {/* Hero Section */}
-      <section className="hero" id="home" style={{ backgroundImage: "url('https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg')" }}>
-          <video autoPlay loop muted playsInline className="hero-video-bg" id="hero-bg-video" poster="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, pointerEvents: 'none' }}>
-              <source src="/images/video-2.mp4" type="video/mp4" />
+      <section className="hero" id="home" style={{ backgroundImage: `url('${heroData?.posterUrl || "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg"}')` }}>
+          <video autoPlay loop muted playsInline className="hero-video-bg" id="hero-bg-video" poster={heroData?.posterUrl || "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg"} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, pointerEvents: 'none' }}>
+              <source src={heroData?.videoUrl || "/images/video-2.mp4"} type="video/mp4" />
           </video>
           <div className="luxury-frame" style={{ zIndex: 2 }}></div>
           <div className="hero-content" style={{ zIndex: 2, position: 'relative', width: '100%', maxWidth: '1300px', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -256,36 +286,28 @@ const Home = () => {
           <div className="about-container">
               <div className="about-img" data-animate="slide-left">
                   <div className="about-slideshow">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg" alt="About Slideshow 1" className="active" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9" alt="About Slideshow 2" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9" alt="About Slideshow 3" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9" alt="About Slideshow 4" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9" alt="About Slideshow 5" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9" alt="About Slideshow 6" />
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9" alt="About Slideshow 7" />
+                      {aboutData?.images?.map((imgUrl, index) => (
+                          <img key={index} src={imgUrl} alt={`About Slideshow ${index + 1}`} className={index === 0 ? "active" : ""} />
+                      ))}
                   </div>
               </div>
               <div className="about-content" data-animate="slide-right">
-                  <p className="hero-tagline">✦ Who We Are ✦</p>
-                  <h3>Defining Luxury in <br/><span className="gold-text">Every Single Detail</span></h3>
-                  <p>Welcome to <strong>Dream Day Events</strong>, your premier partner in luxury event management, premium decor, and gourmet catering. Led by the visionary event designer <strong>Mr. Ayush Kale</strong>, we transform venues into royal spaces, creating rich, premium designs tailored to your desires.</p>
-                  <p>From magnificent wedding stages to vibrant haldi ceremonies, elegant corporate affairs to custom catered delicacies, we ensure perfection in execution. Our signature style blends traditional elegance with modern sophistication.</p>
+                  <p className="hero-tagline">{aboutData?.tagline}</p>
+                  <h3>{aboutData?.title} <br/><span className="gold-text">{aboutData?.titleHighlight}</span></h3>
+                  {aboutData?.paragraphs?.map((p, idx) => (
+                      <p key={idx} dangerouslySetInnerHTML={{ __html: p.replace(/Mr\. Ayush Kale/g, '<strong>Mr. Ayush Kale</strong>').replace(/Dream Day Events/g, '<strong>Dream Day Events</strong>') }} />
+                  ))}
                   
                   <div className="about-features">
-                      <div className="about-feature-item">
-                          <i className="fa-solid fa-award"></i>
-                          <div>
-                              <h4>Elite Designs</h4>
-                              <p style={{ fontSize: '0.85rem', margin: 0, color: 'var(--text-secondary)' }}>Bespoke themes and setups</p>
+                      {aboutData?.features?.map((feature, idx) => (
+                          <div key={idx} className="about-feature-item">
+                              <i className={feature.icon}></i>
+                              <div>
+                                  <h4>{feature.title}</h4>
+                                  <p style={{ fontSize: '0.85rem', margin: 0, color: 'var(--text-secondary)' }}>{feature.desc}</p>
+                              </div>
                           </div>
-                      </div>
-                      <div className="about-feature-item">
-                          <i className="fa-solid fa-utensils"></i>
-                          <div>
-                              <h4>Premium Catering</h4>
-                              <p style={{ fontSize: '0.85rem', margin: 0, color: 'var(--text-secondary)' }}>Gourmet multi-cuisine spreads</p>
-                          </div>
-                      </div>
+                      ))}
                   </div>
               </div>
           </div>
@@ -431,15 +453,14 @@ const Home = () => {
           <div className="manager-container">
               <div className="manager-img-wrapper" data-animate="blur-in">
                   <div className="manager-img">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/ayush-kale.jpg" alt="Mr. Ayush Kale" />
+                      <img src={data.imageUrl} alt={data.name} />
                   </div>
               </div>
-              <div className="manager-info" data-animate="slide-right">
-                  <p className="hero-tagline">✦ The Creative Visionary ✦</p>
-                  <h3>Mr. Ayush Kale</h3>
-                  <h4 className="manager-title">Founder & Lead Event Manager</h4>
-                  <p className="manager-bio">"Every celebration tells a story, and our job is to make it beautiful, memorable, and uniquely yours. At Dream Day Events, we combine creativity, elegance, and meticulous planning to transform your dream event into a reality you'll cherish forever"</p>
-                  <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under Mr. Ayush Kale's creative direction, Dream Day Events has successfully coordinated over 500+ premium weddings and corporate galas, bringing 9+ years of expertise to every single detail.</p>
+              <div className="manager-info" data-animate="slide-up">
+                  <span className="manager-title">{data.title || 'Founder & Lead Event Manager'}</span>
+                  <h2>Meet <span className="gold-text">{data.name}</span></h2>
+                  <p className="manager-bio">{data.bio}</p>
+                  <p className="manager-bio" style={{ fontSize: '0.95rem', fontStyle: 'italic' }}>Under {data.name}'s creative direction, Dream Day Events has successfully coordinated over 500+ premium weddings and corporate galas, bringing 9+ years of expertise to every single detail.</p>
                   <div className="manager-socials">
                       <a href="https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
 

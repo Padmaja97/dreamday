@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { Mail, Calendar, Users, Package } from 'lucide-react';
+import { collection, getDocs, orderBy, query, doc, deleteDoc } from 'firebase/firestore';
+import { Mail, Calendar, Users, Package, Trash2 } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import Badge from '../components/Badge';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -30,6 +30,17 @@ export default function Inquiries() {
     fetchInquiries();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this inquiry?")) return;
+    try {
+      await deleteDoc(doc(db, 'inquiries', id));
+      setInquiries(inquiries.filter(inq => inq.id !== id));
+    } catch (err) {
+      console.error("Error deleting inquiry:", err);
+      alert("Failed to delete inquiry.");
+    }
+  };
+
   if (loading) return <LoadingSpinner message="Loading inquiries..." />;
 
   return (
@@ -54,26 +65,23 @@ export default function Inquiries() {
               <thead>
                 <tr className="bg-bg-surface-hover border-b border-border-subtle">
                   <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">Contact</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">Phone</th>
                   <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">
                     <span className="inline-flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5" />
-                      Event Date
-                    </span>
-                  </th>
-                  <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5" />
-                      Guests
+                      Date
                     </span>
                   </th>
                   <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">
                     <span className="inline-flex items-center gap-1.5">
                       <Package className="w-3.5 h-3.5" />
-                      Packages
+                      Event Type
                     </span>
                   </th>
+                  <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">Location</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">Message</th>
                   <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider">Submitted</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold text-text-muted uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -87,25 +95,30 @@ export default function Inquiries() {
                       <span className="font-medium text-text-primary">{inq.name}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-text-secondary">{inq.email}</div>
-                      {inq.phone && (
-                        <div className="text-text-muted text-xs mt-0.5">{inq.phone}</div>
-                      )}
+                      <div className="text-text-secondary">{inq.phone || '—'}</div>
                     </td>
                     <td className="px-6 py-4 text-text-secondary">{inq.date || '—'}</td>
-                    <td className="px-6 py-4 text-text-secondary">{inq.guests || '—'}</td>
                     <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1.5">
-                        {inq.packages && inq.packages.map(pkg => (
-                          <Badge key={pkg} variant="gold">{pkg}</Badge>
-                        ))}
-                      </div>
+                      {inq.eventType ? <Badge variant="gold">{inq.eventType}</Badge> : '—'}
+                    </td>
+                    <td className="px-6 py-4 text-text-secondary">{inq.location || '—'}</td>
+                    <td className="px-6 py-4 text-text-secondary">
+                      <div className="max-w-[200px] truncate" title={inq.message}>{inq.message || '—'}</div>
                     </td>
                     <td className="px-6 py-4 text-text-muted text-xs">
                       {inq.createdAt?.toDate 
                         ? inq.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                         : '—'
                       }
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button 
+                        onClick={() => handleDelete(inq.id)}
+                        className="p-2 text-text-muted hover:text-error hover:bg-error/10 rounded-full transition-colors"
+                        title="Delete Inquiry"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </td>
                   </tr>
                 ))}

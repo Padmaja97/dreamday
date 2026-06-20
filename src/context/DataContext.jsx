@@ -7,13 +7,76 @@ const DataContext = createContext();
 export const useData = () => useContext(DataContext);
 
 const defaultPackages = {
-  royalStage: 80000,
-  entranceArch: 30000,
-  saffronMandap: 50000,
-  haldiSwing: 20000,
-  ledWall: 40000,
-  ambientLight: 25000,
-  cateringToggle: 800
+  items: [
+    {
+      id: "pkg-1",
+      tag: "Premium Choice",
+      name: "Royal Elite Wedding Stage",
+      price: 150000,
+      period: "Starting",
+      isFeatured: false,
+      features: [
+        "Grand 40ft Stage Backdrop Setup",
+        "Fresh and Silk Floral Arches",
+        "Royal Maharaja Couch / Sofa Seating",
+        "Walkway Red Carpet & Light Pillars",
+        "Elegant Selfie Photo Booth Spot",
+        "Custom 3D Monogram & Cold Pyro Entry",
+        "Complete Ambient LED Venue Lighting"
+      ]
+    },
+    {
+      id: "pkg-2",
+      tag: "Most Popular",
+      name: "Vibrant Shahnaz Haldi",
+      price: 60000,
+      period: "Starting",
+      isFeatured: true,
+      features: [
+        "Traditional Yellow/Pink Silk Draping",
+        "Decorated Wooden swing Setup",
+        "Cascading Heavy Marigold Garlands",
+        "Brass Vessels & Ceremonial Urali Bowl",
+        "Festive Guest Seating Cushions & Mats",
+        "Sound System for Traditional Sangeet",
+        "Haldi Photo backdrop Props"
+      ]
+    },
+    {
+      id: "pkg-3",
+      tag: "Corporate Elite",
+      name: "Imperial Gala Stage",
+      price: 120000,
+      period: "Starting",
+      isFeatured: false,
+      features: [
+        "Modern Panel Staging & Matte Flooring",
+        "High-Def LED Wall Backdrop Integration",
+        "Professional Truss and Spotlight Rigs",
+        "Elite VIP Seating Sofa Lounge Setup",
+        "Registration Counter & Media Wall Decor",
+        "Luxury Centerpieces for Banquet Tables",
+        "Sound System & Wireless Podium Mics"
+      ]
+    },
+    {
+      id: "pkg-4",
+      tag: "Gourmet Feasts",
+      name: "Signature Catering",
+      price: 800,
+      period: "Per Plate",
+      isFeatured: false,
+      features: [
+        "Tailored Veg & Non-Veg Multi-Cuisine",
+        "Luxury 5-Star Buffet Layout Presentation",
+        "3 Live Food Counters (Chat, Pasta, etc.)",
+        "Premium Mocktails & Welcome Drinks Bar",
+        "Royal Dessert Display & Hot Jalebi Counter",
+        "Professional Uniformed Service Staff",
+        "Full Banquet Table Setting & Clean Cutlery"
+      ]
+    }
+  ]
 };
 
 const defaultGallery = [
@@ -70,12 +133,42 @@ const defaultVideos = [
   { id: 12, src: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-12.mp4', poster: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9', badge: 'Mandap cinematic', title: 'Saffron Mandap Cinematic', desc: 'Bespoke saffron wedding mandap floral arrangements and candle decor highlights.', type: 'wedding' }
 ];
 
+const defaultHero = {
+  videoUrl: "/images/video-2.mp4",
+  posterUrl: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg"
+};
+
+const defaultAbout = {
+  images: [
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg",
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9",
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9",
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9",
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9",
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg?v=9",
+    "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-21.jpg?v=9"
+  ],
+  tagline: "✦ Who We Are ✦",
+  title: "Defining Luxury in",
+  titleHighlight: "Every Single Detail",
+  paragraphs: [
+    "Welcome to Dream Day Events, your premier partner in luxury event management, premium decor, and gourmet catering. Led by the visionary event designer Mr. Ayush Kale, we transform venues into royal spaces, creating rich, premium designs tailored to your desires.",
+    "From magnificent wedding stages to vibrant haldi ceremonies, elegant corporate affairs to custom catered delicacies, we ensure perfection in execution. Our signature style blends traditional elegance with modern sophistication."
+  ],
+  features: [
+    { icon: "fa-solid fa-award", title: "Elite Designs", desc: "Bespoke themes and setups" },
+    { icon: "fa-solid fa-utensils", title: "Premium Catering", desc: "Gourmet multi-cuisine spreads" }
+  ]
+};
+
 export const DataProvider = ({ children }) => {
   const [packagesData, setPackagesData] = useState(defaultPackages);
   const [galleryData, setGalleryData] = useState(defaultGallery);
   const [testimonialsData, setTestimonialsData] = useState(defaultTestimonials);
   const [managerData, setManagerData] = useState(defaultManager);
   const [videosData, setVideosData] = useState(defaultVideos);
+  const [heroData, setHeroData] = useState(defaultHero);
+  const [aboutData, setAboutData] = useState(defaultAbout);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -104,6 +197,18 @@ export const DataProvider = ({ children }) => {
         const vidSnap = await getDoc(vidRef);
         if (!vidSnap.exists() || !vidSnap.data().videos || vidSnap.data().videos.length === 0) {
           await setDoc(vidRef, { videos: defaultVideos });
+        }
+
+        const heroRef = doc(db, 'content', 'hero');
+        const heroSnap = await getDoc(heroRef);
+        if (!heroSnap.exists()) {
+          await setDoc(heroRef, defaultHero);
+        }
+
+        const aboutRef = doc(db, 'content', 'about');
+        const aboutSnap = await getDoc(aboutRef);
+        if (!aboutSnap.exists()) {
+          await setDoc(aboutRef, defaultAbout);
         }
         
         // Check testimonials collection empty? (we do this inside unsubTestimonials if empty but let's seed here)
@@ -156,6 +261,18 @@ export const DataProvider = ({ children }) => {
       }
     });
 
+    const unsubHero = onSnapshot(doc(db, 'content', 'hero'), (doc) => {
+      if (doc.exists()) {
+        setHeroData(doc.data());
+      }
+    });
+
+    const unsubAbout = onSnapshot(doc(db, 'content', 'about'), (doc) => {
+      if (doc.exists()) {
+        setAboutData(doc.data());
+      }
+    });
+
     setLoading(false);
 
     return () => {
@@ -164,6 +281,8 @@ export const DataProvider = ({ children }) => {
       unsubTestimonials();
       unsubManager();
       unsubVideos();
+      unsubHero();
+      unsubAbout();
     };
   }, []);
 
@@ -173,6 +292,8 @@ export const DataProvider = ({ children }) => {
     testimonialsData,
     managerData,
     videosData,
+    heroData,
+    aboutData,
     loading
   };
 

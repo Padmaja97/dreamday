@@ -77,8 +77,8 @@ export default function Manager() {
           <div className="bg-bg-surface border border-border-subtle rounded-[var(--radius-lg)] shadow-[var(--shadow-card)] p-6 flex flex-col items-center">
             {/* Avatar */}
             <div className="w-36 h-36 rounded-full bg-bg-input border-[3px] border-accent overflow-hidden relative group shadow-[var(--shadow-gold)]">
-              {data.imageUrl ? (
-                <img src={data.imageUrl} alt="Manager" className="w-full h-full object-cover" />
+              {data.imageUrl || 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/ayush-kale.jpg' ? (
+                <img src={data.imageUrl || 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/ayush-kale.jpg'} alt="Manager" className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <User className="w-12 h-12 text-text-muted" />
