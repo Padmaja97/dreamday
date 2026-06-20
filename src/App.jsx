@@ -10,7 +10,6 @@ import GlobalDecorations from './components/GlobalDecorations';
 
 // Import Pages (will be created next)
 import Home from './pages/Home';
-import About from './pages/About';
 import Services from './pages/Services';
 import Packages from './pages/Packages';
 import Gallery from './pages/Gallery';
@@ -35,7 +34,6 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/packages" element={<Packages />} />
             <Route path="/gallery" element={<Gallery />} />

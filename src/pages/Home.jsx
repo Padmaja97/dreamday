@@ -1,11 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
 import { useLightbox } from '../utils/LightboxContext';
 import { useData } from '../context/DataContext';
 
 const Home = () => {
   useScrollAnimation();
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (location.state?.scrollTo === 'about') {
+      setTimeout(() => {
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+          aboutSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [location]);
+
   const { openLightbox } = useLightbox();
   const { videosData } = useData();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -166,10 +179,6 @@ const Home = () => {
               <p className="hero-tagline" data-animate data-delay="100ms">✦ 500+ EVENTS CRAFTED | 10+ YEARS OF EXCELLENCE ✦</p>
               <h2 className="hero-title" data-animate data-delay="300ms">Timeless Events, <br/><span className="gold-text">Exquisitely Crafted.</span></h2>
               <p className="hero-subtitle" data-animate data-delay="500ms">Where heritage meets high-design. We curate atmosphere, detail, and emotion into Pune's finest celebrations.</p>
-              <div className="hero-btns" data-animate data-delay="700ms">
-                  <Link to="/inquire" className="btn btn-primary">Inquire Now</Link>
-                  <Link to="/portfolio" className="btn btn-primary">View Our Work</Link>
-              </div>
           </div>
           <div className="scroll-indicator">
               <a href="#about"><i className="fa-solid fa-chevron-down"></i></a>
@@ -425,36 +434,17 @@ const Home = () => {
 
       {/* Testimonials Marquee Section */}
       <section className="testimonials-section" id="reviews" style={{ overflow: 'hidden', padding: '100px 0' }}>
-          <div className="section-header" style={{ padding: '0 5%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <p style={{ 
-                  fontFamily: "'Cormorant Garamond', serif", 
-                  fontStyle: 'italic', 
-                  color: 'var(--gold-primary)', 
-                  fontSize: '1.4rem', 
-                  margin: '0 0 10px 0' 
-              }}>
-                  Testimonials
-              </p>
-              <div style={{ 
-                  fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', 
-                  fontWeight: '700', 
-                  margin: '0 0 20px 0', 
-                  color: 'var(--text-primary)',
-                  letterSpacing: '0px',
-                  textAlign: 'center',
-                  fontFamily: "'Poppins', sans-serif"
-              }}>
-                  Feedback From Our Clients
-              </div>
-              <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '1.1rem', textAlign: 'center' }}>
+          <div className="section-header" style={{ textAlign: 'center' }}>
+              <p className="hero-tagline" data-animate data-delay="100ms">✦ Testimonials ✦</p>
+              <h2 data-animate data-delay="250ms">Feedback From <span className="gold-text">Our Clients</span></h2>
+              <p data-animate data-delay="400ms" style={{ maxWidth: '600px', margin: '15px auto 35px auto', color: 'var(--text-secondary)', fontSize: '1.1rem', textAlign: 'center' }}>
                  Real stories from couples and companies who trusted us with their most cherished moments.
               </p>
-              <div style={{ 
+              <div data-animate data-delay="550ms" style={{ 
                   display: 'inline-flex', 
                   justifyContent: 'center', 
                   alignItems: 'center', 
                   gap: '15px', 
-                  marginTop: '35px',
                   padding: '12px 35px',
                   border: '1px solid var(--border-color)',
                   borderRadius: '50px',
@@ -514,8 +504,7 @@ const Home = () => {
                       }}>
                           {/* Image Top with Fade Gradient */}
                           <div style={{ position: 'relative', height: '200px', width: '100%' }}>
-                              <img src={r.img} alt={`${r.name}'s event`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                              <div style={{ position: 'absolute', bottom: -1, left: 0, width: '100%', height: '120px', background: 'linear-gradient(to bottom, transparent, #122443)' }}></div>
+                              <img src={r.img} alt={`${r.name}'s event`} style={{ width: '100%', height: '100%', objectFit: 'cover', WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }} />
                           </div>
 
                           <div style={{ padding: '0 25px 25px 25px', display: 'flex', flexDirection: 'column', flexGrow: 1, zIndex: 1, marginTop: '-20px' }}>
@@ -571,56 +560,72 @@ const Home = () => {
           
           <div data-animate="fade-up" style={{
               width: '100%',
-              maxWidth: '900px',
+              maxWidth: '850px',
               background: 'var(--bg-card)',
-              borderRadius: '20px',
+              borderRadius: '12px',
               border: '1px solid var(--border-color)',
-              padding: '40px',
+              padding: '40px 50px',
               boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
               backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)'
+              WebkitBackdropFilter: 'blur(10px)',
+              fontFamily: "'Poppins', 'Helvetica', sans-serif"
           }}>
-              <form id="contact-form" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+              <form id="contact-form" style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+                  {/* Row 1 */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '25px' }}>
                       <div className="form-group" style={{ margin: 0 }}>
-                          <input type="text" id="name" required placeholder="Full Name" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
+                          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Full Name <span style={{color: '#ef4444'}}>*</span></label>
+                          <input type="text" id="name" required placeholder="John Smith" style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                       </div>
                       <div className="form-group" style={{ margin: 0 }}>
-                          <input type="tel" id="phone" required placeholder="Phone Number" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
-                      </div>
-                      <div className="form-group" style={{ margin: 0 }}>
-                          <input type="email" id="email" required placeholder="Email Address" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
+                          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Phone <span style={{color: '#ef4444'}}>*</span></label>
+                          <input type="tel" id="phone" required placeholder="+91 98765 43210" style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                       </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+                  {/* Row 2 */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '25px' }}>
                       <div className="form-group" style={{ margin: 0 }}>
-                          <select id="event-type" required defaultValue="" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }}>
-                              <option value="" disabled>Event Type</option>
-                              <option value="wedding">Wedding Decoration & Stage</option>
-                              <option value="haldi">Haldi & Mehndi Setup</option>
+                          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Event type <span style={{color: '#ef4444'}}>*</span></label>
+                          <select id="event-type" required defaultValue="" style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}>
+                              <option value="" disabled>Select type</option>
+                              <option value="wedding">Wedding Decoration</option>
                               <option value="corporate">Corporate Event</option>
-                              <option value="other">Other Celebration</option>
+                              <option value="other">Other</option>
                           </select>
                       </div>
                       <div className="form-group" style={{ margin: 0 }}>
-                          <input type="date" id="date" required style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-secondary)' }} />
-                      </div>
-                      <div className="form-group" style={{ margin: 0 }}>
-                          <input type="number" id="guest-count-form" placeholder="Guest Count" min="1" style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)' }} />
+                          <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Event date <span style={{color: '#ef4444'}}>*</span></label>
+                          <input type="date" id="date" required style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-secondary)', fontSize: '1rem', outline: 'none', colorScheme: 'dark' }} />
                       </div>
                   </div>
 
+                  {/* Row 3 */}
                   <div className="form-group" style={{ margin: 0 }}>
-                      <textarea id="message" placeholder="Message / Special Requirements..." style={{ width: '100%', padding: '15px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '10px', color: 'var(--text-primary)', height: '120px', resize: 'vertical' }}></textarea>
+                      <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Preferred Location <span style={{color: '#ef4444'}}>*</span></label>
+                      <input type="text" id="location" required placeholder="Enter your preferred event location" style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
+                  </div>
+
+                  {/* Row 4 */}
+                  <div className="form-group" style={{ margin: 0 }}>
+                      <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Message <span style={{color: '#ef4444'}}>*</span></label>
+                      <textarea id="message" required placeholder="Hello, I'm interested in event management services by The Bliss Events..." style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', height: '140px', resize: 'vertical', fontSize: '1rem', outline: 'none' }}></textarea>
                   </div>
                   
-                  <div style={{ display: 'flex', gap: '20px', marginTop: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                      <button type="button" className="btn btn-primary" onClick={() => alert('Submit logic ported to React')} style={{ padding: '15px 40px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '30px', minWidth: '200px' }}>Submit Request</button>
-                      <button type="button" id="whatsapp-submit-btn" className="btn btn-secondary" style={{ background: '#25d366', color: 'white', border: '1px solid #25d366', padding: '15px 40px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '30px', minWidth: '200px' }}>
-                          <i className="fa-brands fa-whatsapp" style={{ marginRight: '8px' }}></i>WhatsApp Us
+                  {/* Buttons */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginTop: '10px' }}>
+                      <button type="button" className="btn" onClick={() => alert('Submit logic ported to React')} style={{ background: 'var(--gold-gradient)', color: '#000', border: 'none', padding: '16px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '8px', cursor: 'pointer', transition: 'transform 0.3s' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                          Submit inquiry
+                      </button>
+                      <button type="button" id="whatsapp-submit-btn" className="btn" style={{ background: 'transparent', color: '#25d366', border: '2px solid #25d366', padding: '16px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.3s' }} onMouseOver={e => {e.currentTarget.style.background = '#25d366'; e.currentTarget.style.color = '#fff';}} onMouseOut={e => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#25d366';}}>
+                          <i className="fa-brands fa-whatsapp" style={{ fontSize: '1.2rem' }}></i> WhatsApp Us
                       </button>
                   </div>
+
+                  {/* Footer Text */}
+                  <p style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.85rem', marginTop: '10px' }}>
+                      By submitting this form, you agree to our privacy policy. We'll never share your information.
+                  </p>
               </form>
           </div>
       </section>

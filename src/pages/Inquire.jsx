@@ -62,26 +62,35 @@ const Inquire = () => {
       {/* Contact Form Section */}
       <section className="contact" id="contact" style={{ paddingTop: '50px', minHeight: '70vh' }}>
           <div className="contact-container">
-              <div className="contact-form-wrapper" data-animate="slide-left">
-                  <form id="contact-form" onSubmit={handleSubmit}>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="name">Your Name</label>
-                              <input type="text" id="name" className="form-control" required placeholder="Enter your full name" value={formData.name} onChange={handleChange} />
+              <div className="contact-form-wrapper" data-animate="slide-left" style={{
+                  background: 'var(--bg-card)',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border-color)',
+                  padding: '40px',
+                  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  fontFamily: "'Poppins', 'Helvetica', sans-serif"
+              }}>
+                  <form id="contact-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '25px' }}>
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="name" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Your Name <span style={{color: '#ef4444'}}>*</span></label>
+                              <input type="text" id="name" required placeholder="Enter your full name" value={formData.name} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                           </div>
-                          <div className="form-group">
-                              <label htmlFor="email">Email Address</label>
-                              <input type="email" id="email" className="form-control" required placeholder="Enter your email" value={formData.email} onChange={handleChange} />
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="email" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Email Address <span style={{color: '#ef4444'}}>*</span></label>
+                              <input type="email" id="email" required placeholder="Enter your email" value={formData.email} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                           </div>
                       </div>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="phone">Phone Number</label>
-                              <input type="tel" id="phone" className="form-control" required placeholder="Enter your phone number" value={formData.phone} onChange={handleChange} />
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '25px' }}>
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="phone" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Phone Number <span style={{color: '#ef4444'}}>*</span></label>
+                              <input type="tel" id="phone" required placeholder="Enter your phone number" value={formData.phone} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                           </div>
-                          <div className="form-group">
-                              <label htmlFor="eventType">Event Type</label>
-                              <select id="eventType" className="form-control" required value={formData.eventType} onChange={handleChange}>
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="eventType" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Event Type <span style={{color: '#ef4444'}}>*</span></label>
+                              <select id="eventType" required value={formData.eventType} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}>
                                   <option value="" disabled>Select event category</option>
                                   <option value="wedding">Wedding Decoration & Stage</option>
                                   <option value="haldi">Haldi & Mehndi Setup</option>
@@ -97,24 +106,24 @@ const Inquire = () => {
                               </select>
                           </div>
                       </div>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="date">Event Date</label>
-                              <input type="date" id="date" className="form-control" required value={formData.date} onChange={handleChange} />
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '25px' }}>
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="date" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Event Date <span style={{color: '#ef4444'}}>*</span></label>
+                              <input type="date" id="date" required value={formData.date} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-secondary)', fontSize: '1rem', outline: 'none', colorScheme: 'dark' }} />
                           </div>
-                          <div className="form-group">
-                              <label htmlFor="venue">Event Venue (if known)</label>
-                              <input type="text" id="venue" className="form-control" placeholder="Enter venue name or city" value={formData.venue} onChange={handleChange} />
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="venue" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Event Venue (if known)</label>
+                              <input type="text" id="venue" placeholder="Enter venue name or city" value={formData.venue} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                           </div>
                       </div>
-                      <div className="form-row">
-                          <div className="form-group">
-                              <label htmlFor="guestCount">Approximate Guest Count</label>
-                              <input type="number" id="guestCount" className="form-control" placeholder="e.g., 150" min="1" value={formData.guestCount} onChange={handleChange} />
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '25px' }}>
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="guestCount" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Approximate Guest Count</label>
+                              <input type="number" id="guestCount" placeholder="e.g., 150" min="1" value={formData.guestCount} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }} />
                           </div>
-                          <div className="form-group">
-                              <label htmlFor="budget">Budget Range</label>
-                              <select id="budget" className="form-control" value={formData.budget} onChange={handleChange}>
+                          <div className="form-group" style={{ margin: 0 }}>
+                              <label htmlFor="budget" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Budget Range</label>
+                              <select id="budget" value={formData.budget} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}>
                                   <option value="" disabled>Select budget range</option>
                                   <option value="under-50k">Under ₹50,000</option>
                                   <option value="50k-1l">₹50,000 - ₹1,00,000</option>
@@ -124,16 +133,21 @@ const Inquire = () => {
                               </select>
                           </div>
                       </div>
-                      <div className="form-group">
-                          <label htmlFor="message">Message / Special Requirements</label>
-                          <textarea id="message" className="form-control" placeholder="Describe your vision, decor preferences, theme ideas, or other special requirements..." value={formData.message} onChange={handleChange}></textarea>
+                      <div className="form-group" style={{ margin: 0 }}>
+                          <label htmlFor="message" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Message / Special Requirements</label>
+                          <textarea id="message" placeholder="Describe your vision, decor preferences, theme ideas, or other special requirements..." value={formData.message} onChange={handleChange} style={{ width: '100%', padding: '12px 16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', height: '140px', resize: 'vertical', fontSize: '1rem', outline: 'none' }}></textarea>
                       </div>
-                      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
-                          <button type="submit" className="btn btn-primary">Send Email</button>
-                          <button type="button" onClick={handleWhatsApp} className="btn btn-secondary" style={{ background: '#25d366', color: 'white', border: '1px solid #25d366' }}>
-                              <i className="fa-brands fa-whatsapp" style={{ marginRight: '8px' }}></i>Inquire on WhatsApp
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginTop: '10px' }}>
+                          <button type="submit" className="btn" style={{ background: 'var(--gold-gradient)', color: '#000', border: 'none', padding: '16px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '8px', cursor: 'pointer', transition: 'transform 0.3s' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                              Submit inquiry
+                          </button>
+                          <button type="button" onClick={handleWhatsApp} className="btn" style={{ background: 'transparent', color: '#25d366', border: '2px solid #25d366', padding: '16px', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.3s' }} onMouseOver={e => {e.currentTarget.style.background = '#25d366'; e.currentTarget.style.color = '#fff';}} onMouseOut={e => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#25d366';}}>
+                              <i className="fa-brands fa-whatsapp" style={{ fontSize: '1.2rem' }}></i> WhatsApp Us
                           </button>
                       </div>
+                      <p style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.85rem', marginTop: '10px' }}>
+                          By submitting this form, you agree to our privacy policy. We'll never share your information.
+                      </p>
                   </form>
               </div>
               

@@ -1,4 +1,4 @@
-﻿/* Google Fonts */
+/* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -272,7 +272,7 @@ section {
 }
 
 .section-header h2::after {
-    content: 'âœ¦';
+    content: '✦';
     position: absolute;
     bottom: -12px;
     left: 50%;
@@ -3699,3 +3699,11 @@ body.light-mode .marquee-fade-right {
     background: linear-gradient(to left, var(--bg-primary), transparent);
 }
 
+@media (max-width: 768px) {
+    .navbar-contact-btn .contact-text {
+        display: none;
+    }
+    .navbar-contact-btn {
+        padding: 8px 12px !important;
+    }
+}
