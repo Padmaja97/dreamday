@@ -9,7 +9,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 const Home = () => {
   useScrollAnimation();
   const location = useLocation();
-  const { managerData, heroData, aboutData } = useData();
+  const { managerData, heroData, aboutData, videosData, highlightsData, servicesData, testimonialsData } = useData();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -88,7 +88,7 @@ const Home = () => {
   if (data.name === 'Mr. Ayush KaleMr. Ayush Kale' || data.name.includes('Ayush KaleMr')) {
     data.name = 'Mr. Ayush Kale';
   }
-  const { videosData } = useData();
+
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const horizontalSectionRef = useRef(null);
@@ -172,22 +172,16 @@ const Home = () => {
   }, []);
 
   // Handle about slideshow
+  const [activeAboutSlide, setActiveAboutSlide] = useState(0);
+
   useEffect(() => {
-    const aboutSlideshow = document.querySelector('.about-slideshow');
-    if (!aboutSlideshow) return;
-    
-    const images = aboutSlideshow.querySelectorAll('img');
-    let activeIdx = 0;
-    let intervalId;
-    if (images.length > 1) {
-      intervalId = setInterval(() => {
-        images[activeIdx].classList.remove('active');
-        activeIdx = (activeIdx + 1) % images.length;
-        images[activeIdx].classList.add('active');
-      }, 1000);
-    }
+    setActiveAboutSlide(0);
+    if (!aboutData?.images || aboutData.images.length <= 1) return;
+    const intervalId = setInterval(() => {
+      setActiveAboutSlide(prev => (prev + 1) % aboutData.images.length);
+    }, 4000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [aboutData?.images]);
 
   // Handle Before/After slider
   useEffect(() => {
@@ -287,7 +281,7 @@ const Home = () => {
               <div className="about-img" data-animate="slide-left">
                   <div className="about-slideshow">
                       {aboutData?.images?.map((imgUrl, index) => (
-                          <img key={index} src={imgUrl} alt={`About Slideshow ${index + 1}`} className={index === 0 ? "active" : ""} />
+                          <img key={index} src={imgUrl} alt={`About Slideshow ${index + 1}`} className={index === activeAboutSlide ? "active" : ""} />
                       ))}
                   </div>
               </div>
@@ -334,11 +328,11 @@ const Home = () => {
       {/* Cinematic Highlights Section */}
       <section className="video-highlights-section" id="highlights" style={{ paddingTop: '80px', paddingBottom: '50px' }}>
           <div className="section-header" style={{ marginBottom: '50px' }}>
-              <p className="hero-tagline" data-animate data-delay="100ms">✦ Experience the Magic ✦</p>
-              <h2 data-animate data-delay="250ms">Cinematic <span className="gold-text">Highlights</span></h2>
+              <p className="hero-tagline" data-animate data-delay="100ms">{highlightsData?.tagline || '✦ Experience the Magic ✦'}</p>
+              <h2 data-animate data-delay="250ms">{highlightsData?.title || 'Cinematic'} <span className="gold-text">{highlightsData?.titleHighlight || 'Highlights'}</span></h2>
           </div>
           <div className="luxury-video-trio" data-animate data-stagger>
-              {videosData && videosData.slice(0, 3).map((vid, idx) => (
+              {videosData && highlightsData?.videoIds && videosData.filter(v => highlightsData.videoIds.includes(v.id)).slice(0, 3).map((vid, idx) => (
                   <div className="video-trio-card" id={`trio-player-${idx + 1}`} key={vid.id || idx} onClick={() => openLightbox('video', vid.src || vid.url)} style={{ cursor: 'pointer' }}>
                       <span className="video-trio-badge">{vid.badge || 'Highlight'}</span>
                       <video autoPlay loop muted playsInline preload="auto" poster={vid.poster} style={{ backgroundImage: `url('${vid.poster}')` }}>
@@ -351,11 +345,6 @@ const Home = () => {
                   </div>
               ))}
           </div>
-          <div style={{ textAlign: 'center', marginTop: '50px' }} data-animate>
-              <a href="https://www.instagram.com/royal_eventanddecor/reels/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-                  <i className="fa-brands fa-instagram" style={{ marginRight: '8px', color: 'var(--gold-primary)' }}></i>Check the Reel on Instagram
-              </a>
-          </div>
       </section>
 
       {/* Pinned Horizontal Scrolling Services Section */}
@@ -367,77 +356,17 @@ const Home = () => {
               </div>
               
               <div className="services-horizontal-track" ref={horizontalContentRef} data-animate data-stagger>
-                  {/* Service 1: Wedding Decor */}
-                  <div className="service-card compact-card" data-animate>
-                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
-                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg" alt="Wedding Decor" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                      </div>
-                      <div className="service-card-content" style={{ padding: '20px' }}>
-                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-ring"></i></div>
-                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Wedding Decor</h3>
-                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Grand stage designs, beautiful mandaps, entrance archways and floral styling that leave a lasting impression.</p>
-                      </div>
-                  </div>
-                  
-                  {/* Service 2: Haldi & Mehndi Setup */}
-                  <div className="service-card compact-card" data-animate>
-                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
-                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/haldi-yellow.jpg" alt="Haldi & Mehndi Setup" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                      </div>
-                      <div className="service-card-content" style={{ padding: '20px' }}>
-                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-palette"></i></div>
-                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Haldi & Mehndi</h3>
-                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Vibrant, colourful, and custom setups using fresh flowers and unique props matching your traditional themes.</p>
-                      </div>
-                  </div>
-
-                  {/* Service 3: Reception Decor */}
-                  <div className="service-card compact-card" data-animate>
-                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
-                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg" alt="Reception Decor" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                      </div>
-                      <div className="service-card-content" style={{ padding: '20px' }}>
-                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-champagne-glasses"></i></div>
-                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Reception Decor</h3>
-                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Ultra-modern layouts, ambient lighting setups, elegant drapes, and high-fashion lounges for post-wedding events.</p>
-                      </div>
-                  </div>
-
-                  {/* Service 4: Gourmet Catering */}
-                  <div className="service-card compact-card" data-animate>
-                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
-                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg" alt="Gourmet Catering" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                      </div>
-                      <div className="service-card-content" style={{ padding: '20px' }}>
-                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-hotdog"></i></div>
-                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Gourmet Catering</h3>
-                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Exquisite culinary experience with premium serving displays, tailored menus, and professional hospitality staff.</p>
-                      </div>
-                  </div>
-
-                  {/* Service 5: Themed Parties & Birthdays */}
-                  <div className="service-card compact-card" data-animate>
-                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
-                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg" alt="Themed Parties & Birthdays" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                      </div>
-                      <div className="service-card-content" style={{ padding: '20px' }}>
-                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-cake-candles"></i></div>
-                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Birthdays & Parties</h3>
-                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Creative themed designs, balloons, and customized decor for kids' birthdays and private social gatherings.</p>
-                      </div>
-                  </div>
-
-                  {/* Service 6: Corporate Galas */}
-                  <div className="service-card compact-card" data-animate>
-                      <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
-                          <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg" alt="Corporate Galas" className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                      </div>
-                      <div className="service-card-content" style={{ padding: '20px' }}>
-                          <div className="service-icon" style={{ fontSize: '1.5rem', marginBottom: '10px' }}><i className="fa-solid fa-briefcase"></i></div>
-                          <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Corporate Galas</h3>
-                          <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>Professional stage branding, audio-visual coordinate setups, premium conference decor, and awards night arrangements.</p>
-                      </div>
-                  </div>
+                  {servicesData && servicesData.filter(s => s.isFeatured).map((service) => (
+                    <div key={service.id} className="service-card compact-card" data-animate>
+                        <div className="service-img-wrapper" style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
+                            <img src={service.img} alt={service.title} className="service-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
+                        </div>
+                        <div className="service-card-content" style={{ padding: '20px' }}>
+                            <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>{service.title}</h3>
+                            <p style={{ fontSize: '0.9rem', marginBottom: '0' }}>{service.desc}</p>
+                        </div>
+                    </div>
+                  ))}
               </div>
               
               <div style={{ textAlign: 'center', marginTop: '20px' }} data-animate>
@@ -503,29 +432,8 @@ const Home = () => {
               <div className="marquee-fade marquee-fade-right" style={{ position: 'absolute', top: 0, right: 0, width: '150px', height: '100%', zIndex: 2, pointerEvents: 'none' }}></div>
               
               <div className="marquee-content">
-                  {[
-                      { name: 'Amit Deshpande', gender: 'boy', text: 'Excellent coordination! Mr. Ayush Kale managed the entire sangeet and catering display flawlessly. The guest comments on the food were incredible!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9' },
-                      { name: 'Neha Kulkarni', gender: 'girl', text: 'They transformed a simple banquet hall into a royal wedding palace. The gold frame elements and fresh flowers were outstanding. Highly recommended luxury planner in Nagpur!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9' },
-                      { name: 'Rajesh Sen', gender: 'boy', text: 'Top tier professionalism. Easy booking, premium catering setup, and gorgeous lighting design. The team was prompt and executed exactly what we signed on.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9' },
-                      { name: 'Priya Sharma', gender: 'girl', text: 'Dream Day Events made my haldi ceremony look like a movie set. The vibrant yellow themes and floral props were perfect!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9' },
-                      { name: 'Vikram Joshi', gender: 'boy', text: 'Hosted our corporate gala with them. The stage branding and AV setup were top-notch. Our executives were extremely impressed.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg' },
-                      { name: 'Sneha Patel', gender: 'girl', text: 'The reception decor was breathtaking! Ambient lighting, elegant drapes, and the lounge setup added so much class to our night.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg' },
-                      { name: 'Rahul Mehta', gender: 'boy', text: 'Gourmet catering that truly delivers on taste and presentation. Their hospitality staff was courteous and professional.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg' },
-                      { name: 'Anjali Verma', gender: 'girl', text: 'From planning to execution, every detail was handled with precision. Thank you for making our dream day come true.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg' },
-                      { name: 'Siddharth Rao', gender: 'boy', text: 'We had a themed birthday party for our daughter and the balloon decor was so creative and beautifully done. She loved it!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg' },
-                      { name: 'Kavita Iyer', gender: 'girl', text: 'Highly impressed with their outdoor lawn styling. The beachside sky-blue decor for our anniversary was a hit among guests.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg' },
-                      // Duplicate for seamless scroll
-                      { name: 'Amit Deshpande', gender: 'boy', text: 'Excellent coordination! Mr. Ayush Kale managed the entire sangeet and catering display flawlessly. The guest comments on the food were incredible!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9' },
-                      { name: 'Neha Kulkarni', gender: 'girl', text: 'They transformed a simple banquet hall into a royal wedding palace. The gold frame elements and fresh flowers were outstanding. Highly recommended luxury planner in Nagpur!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9' },
-                      { name: 'Rajesh Sen', gender: 'boy', text: 'Top tier professionalism. Easy booking, premium catering setup, and gorgeous lighting design. The team was prompt and executed exactly what we signed on.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9' },
-                      { name: 'Priya Sharma', gender: 'girl', text: 'Dream Day Events made my haldi ceremony look like a movie set. The vibrant yellow themes and floral props were perfect!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9' },
-                      { name: 'Vikram Joshi', gender: 'boy', text: 'Hosted our corporate gala with them. The stage branding and AV setup were top-notch. Our executives were extremely impressed.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg' },
-                      { name: 'Sneha Patel', gender: 'girl', text: 'The reception decor was breathtaking! Ambient lighting, elegant drapes, and the lounge setup added so much class to our night.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg' },
-                      { name: 'Rahul Mehta', gender: 'boy', text: 'Gourmet catering that truly delivers on taste and presentation. Their hospitality staff was courteous and professional.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg' },
-                      { name: 'Anjali Verma', gender: 'girl', text: 'From planning to execution, every detail was handled with precision. Thank you for making our dream day come true.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg' },
-                      { name: 'Siddharth Rao', gender: 'boy', text: 'We had a themed birthday party for our daughter and the balloon decor was so creative and beautifully done. She loved it!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg' },
-                      { name: 'Kavita Iyer', gender: 'girl', text: 'Highly impressed with their outdoor lawn styling. The beachside sky-blue decor for our anniversary was a hit among guests.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg' }
-                  ].map((r, idx) => (
+                  {testimonialsData && testimonialsData.length > 0 ? (
+                    [...testimonialsData, ...testimonialsData].map((r, idx) => (
                       <div className="review-card" key={idx} style={{
                           display: 'inline-flex',
                           flexDirection: 'column',
@@ -562,7 +470,7 @@ const Home = () => {
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                       <div style={{ position: 'relative', flexShrink: 0, width: '50px', height: '50px' }}>
                                           <img 
-                                            src={r.gender === 'boy' ? '/images/boy_avatar.png' : '/images/girl_avatar.png'} 
+                                            src={r.pfp || '/images/boy_avatar.png'} 
                                             alt={`${r.name} profile`} 
                                             style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', background: '#0d1e3d', border: '1px solid var(--border-color)' }} 
                                           />
@@ -573,7 +481,7 @@ const Home = () => {
                                       </div>
                                       <div>
                                           <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: '600' }}>{r.name}</h4>
-                                          <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.6)' }}>Event — Nagpur</span>
+                                          <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.6)' }}>{r.location || 'Event — Nagpur'}</span>
                                       </div>
                                   </div>
 
@@ -584,7 +492,8 @@ const Home = () => {
                               </div>
                           </div>
                       </div>
-                  ))}
+                  ))
+                  ) : null}
               </div>
           </div>
       </section>

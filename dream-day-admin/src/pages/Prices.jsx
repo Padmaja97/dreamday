@@ -139,11 +139,17 @@ export default function Prices() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = async (index) => {
     if(window.confirm("Are you sure you want to delete this package?")) {
       const newPkgs = [...packages];
       newPkgs.splice(index, 1);
       setPackages(newPkgs);
+      try {
+        await setDoc(doc(db, 'content', 'packages'), { items: newPkgs });
+        toast.success('Package deleted successfully!');
+      } catch (err) {
+        toast.error('Error deleting package: ' + err.message);
+      }
     }
   };
 

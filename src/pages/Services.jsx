@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '../utils/useScrollAnimation';
+import { useData } from '../context/DataContext';
 
 const Services = () => {
   useScrollAnimation();
+  const { servicesData } = useData();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
 
@@ -28,166 +30,22 @@ const Services = () => {
 
       <section className="services" id="services" style={{ paddingTop: '80px' }}>
           <div className="services-grid">
-              {/* Service 1: Wedding Decor */}
-              <div className="service-card" data-animate onClick={() => openModal('wedding-decor')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg" alt="Wedding Decor" className="service-card-img" />
-                      <span className="service-badge">Most Popular</span>
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-ring"></i></div>
-                      <h3>Wedding Decor</h3>
-                      <span className="service-card-meta">250+ Weddings Decorated</span>
-                      <p>Grand stage designs, beautiful mandaps, entrance archways and floral styling that leave a lasting impression.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Wedding Decor" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
+              {servicesData && servicesData.map(service => (
+                  <div key={service.id} className="service-card" data-animate onClick={() => openModal(service)}>
+                      <div className="service-img-wrapper">
+                          <img src={service.img} alt={service.title} className="service-card-img" />
+                          {service.badge && <span className="service-badge">{service.badge}</span>}
+                      </div>
+                      <div className="service-card-content">
+                          <h3>{service.title}</h3>
+                          {service.meta && <span className="service-card-meta">{service.meta}</span>}
+                          <p>{service.desc}</p>
+                          <div className="service-card-actions">
+                              <Link to={`/inquire?service=${service.inquireText}`} className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
+                          </div>
                       </div>
                   </div>
-              </div>
-
-              {/* Service 2: Haldi & Mehndi Setup */}
-              <div className="service-card" data-animate onClick={() => openModal('haldi-mehndi')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/haldi-yellow.jpg" alt="Haldi & Mehndi Setup" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-palette"></i></div>
-                      <h3>Haldi & Mehndi Setup</h3>
-                      <span className="service-card-meta">180+ Ceremonies Styled</span>
-                      <p>Vibrant, colourful, and custom setups using fresh flowers and unique props matching your traditional themes.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Haldi and Mehndi" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 3: Reception Decor */}
-              <div className="service-card" data-animate onClick={() => openModal('reception-decor')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg" alt="Reception Decor" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-champagne-glasses"></i></div>
-                      <h3>Reception Decor</h3>
-                      <span className="service-card-meta">120+ Grand Receptions</span>
-                      <p>Ultra-modern layouts, ambient lighting setups, elegant drapes, and high-fashion lounges for post-wedding events.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Reception Decor" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 4: Gourmet Catering */}
-              <div className="service-card" data-animate onClick={() => openModal('gourmet-catering')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg" alt="Gourmet Catering" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-hotdog"></i></div>
-                      <h3>Gourmet Catering</h3>
-                      <span className="service-card-meta">300+ Feasts Served</span>
-                      <p>Exquisite culinary experience with premium serving displays, tailored menus, and professional hospitality staff.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Gourmet Catering" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 5: Themed Parties & Birthdays */}
-              <div className="service-card" data-animate onClick={() => openModal('themed-parties')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg" alt="Themed Parties & Birthdays" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-cake-candles"></i></div>
-                      <h3>Themed Parties & Birthdays</h3>
-                      <span className="service-card-meta">150+ Celebrations</span>
-                      <p>Creative themed designs, balloons, and customized decor for kids' birthdays and private social gatherings.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Themed Parties" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 6: Corporate Galas */}
-              <div className="service-card" data-animate onClick={() => openModal('corporate-galas')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg" alt="Corporate Galas" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-briefcase"></i></div>
-                      <h3>Corporate Galas</h3>
-                      <span className="service-card-meta">90+ Corporate Events</span>
-                      <p>Professional stage branding, audio-visual coordinate setups, premium conference decor, and awards night arrangements.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Corporate Event" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 7: Photography & Videography */}
-              <div className="service-card" data-animate onClick={() => openModal('photography-videography')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-17.jpg" alt="Photography & Videography" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-camera"></i></div>
-                      <h3>Photography & Videography</h3>
-                      <span className="service-card-meta">200+ Shoots Covered</span>
-                      <p>Cinematic highlight reels, professional event photography, and drone packages capturing every single emotion.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Photography" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 8: Entertainment & Live Music */}
-              <div className="service-card" data-animate onClick={() => openModal('entertainment-music')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-18.jpg" alt="Entertainment & Live Music" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-music"></i></div>
-                      <h3>Entertainment & Live Music</h3>
-                      <span className="service-card-meta">100+ Live Stages</span>
-                      <p>Live wedding bands, classical musicians, professional DJs, sound setups, and elite artist management.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Entertainment" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 9: Guest Transportation & Logistics */}
-              <div className="service-card" data-animate onClick={() => openModal('transport-logistics')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-22.jpg" alt="Guest Transportation & Logistics" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-car"></i></div>
-                      <h3>Guest Transportation & Logistics</h3>
-                      <span className="service-card-meta">70+ Event Fleets</span>
-                      <p>Premium guest arrivals, vehicle arrangements, route coordination, and hospitality helpdesk management.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Transport" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
-
-              {/* Service 10: Floral Arrangements (standalone) */}
-              <div className="service-card" data-animate onClick={() => openModal('floral-arrangements')}>
-                  <div className="service-img-wrapper">
-                      <img src="https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg" alt="Floral Arrangements" className="service-card-img" />
-                  </div>
-                  <div className="service-card-content">
-                      <div className="service-icon"><i className="fa-solid fa-seedling"></i></div>
-                      <h3>Floral Arrangements</h3>
-                      <span className="service-card-meta">500+ Floral Styles</span>
-                      <p>Exotic floral setups, table centerpieces, fresh flower decorations, and customized boutique arrangements.</p>
-                      <div className="service-card-actions">
-                          <Link to="/inquire?service=Floral" className="btn btn-card-inquire" onClick={(e) => e.stopPropagation()}>Inquire Now</Link>
-                      </div>
-                  </div>
-              </div>
+              ))}
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '50px' }} data-animate>
@@ -196,20 +54,23 @@ const Services = () => {
       </section>
 
       {/* Service Detail Popup Modal */}
-      {modalOpen && (
+      {modalOpen && selectedService && (
         <div id="service-modal" className="custom-modal" style={{ display: 'flex' }}>
             <div className="modal-backdrop" onClick={closeModal}></div>
             <div className="modal-content-wrapper">
                 <button className="modal-close-btn" onClick={closeModal}>&times;</button>
                 <div className="modal-body-layout">
-                    <div className="modal-info" style={{ flex: '1 1 100%' }}>
-                        <span className="modal-service-badge" id="modal-service-badge">{selectedService}</span>
+                    <div className="modal-gallery" style={{ height: '100%', minHeight: '300px', borderRadius: '15px', overflow: 'hidden' }}>
+                         <img src={selectedService.img} alt={selectedService.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div className="modal-info">
+                        <span className="modal-service-badge" id="modal-service-badge">{selectedService.title}</span>
                         <h2 id="modal-service-title" className="gold-text">Inquire About This Service</h2>
                         <p className="modal-price-range" id="modal-service-price">We customize packages based on your requirements.</p>
-                        <div className="modal-desc" id="modal-service-desc">Please contact us for more detailed information and a personalized quote for {selectedService}.</div>
+                        <div className="modal-desc" id="modal-service-desc">{selectedService.desc}</div>
                         
-                        <div className="modal-actions" style={{ marginTop: '20px' }}>
-                            <Link to={`/inquire?service=${selectedService}`} className="btn btn-primary">Inquire About This Service</Link>
+                        <div className="modal-actions" style={{ marginTop: '30px' }}>
+                            <Link to={`/inquire?service=${selectedService.inquireText}`} className="btn btn-primary">Inquire Now</Link>
                         </div>
                     </div>
                 </div>

@@ -32,7 +32,8 @@ export default function Dashboard() {
         ]);
 
         const galleryImages = gallerySnap.exists() ? (gallerySnap.data().images?.length || 0) : 0;
-        const packageCount = packagesSnap.exists() ? Object.keys(packagesSnap.data()).length : 0;
+        const packagesData = packagesSnap.exists() ? packagesSnap.data() : null;
+        const packageCount = (packagesData && Array.isArray(packagesData.items)) ? packagesData.items.length : 4;
         const videoCount = videosSnap.exists() ? (videosSnap.data().videos?.length || 0) : 0;
 
         setStats({

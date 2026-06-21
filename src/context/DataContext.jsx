@@ -134,7 +134,7 @@ const defaultVideos = [
 ];
 
 const defaultHero = {
-  videoUrl: "/images/video-2.mp4",
+  videoUrl: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/video-2.mp4",
   posterUrl: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg"
 };
 
@@ -161,58 +161,180 @@ const defaultAbout = {
   ]
 };
 
+const defaultHighlights = {
+  tagline: "✦ Experience the Magic ✦",
+  title: "Cinematic",
+  titleHighlight: "Highlights",
+  videoIds: [1, 2, 3]
+};
+
+const defaultServices = [
+  {
+    id: 'wedding-decor',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg",
+    badge: "Most Popular",
+
+    title: "Wedding Decor",
+    meta: "250+ Weddings Decorated",
+    desc: "Grand stage designs, beautiful mandaps, entrance archways and floral styling that leave a lasting impression.",
+    inquireText: "Wedding Decor",
+    isFeatured: true
+  },
+  {
+    id: 'haldi-mehndi',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/haldi-yellow.jpg",
+
+    title: "Haldi & Mehndi Setup",
+    meta: "180+ Ceremonies Styled",
+    desc: "Vibrant, colourful, and custom setups using fresh flowers and unique props matching your traditional themes.",
+    inquireText: "Haldi and Mehndi",
+    isFeatured: true
+  },
+  {
+    id: 'reception-decor',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg",
+
+    title: "Reception Decor",
+    meta: "120+ Grand Receptions",
+    desc: "Ultra-modern layouts, ambient lighting setups, elegant drapes, and high-fashion lounges for post-wedding events.",
+    inquireText: "Reception Decor",
+    isFeatured: true
+  },
+  {
+    id: 'gourmet-catering',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg",
+
+    title: "Gourmet Catering",
+    meta: "300+ Feasts Served",
+    desc: "Exquisite culinary experience with premium serving displays, tailored menus, and professional hospitality staff.",
+    inquireText: "Gourmet Catering",
+    isFeatured: true
+  },
+  {
+    id: 'themed-parties',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg",
+
+    title: "Themed Parties & Birthdays",
+    meta: "150+ Celebrations",
+    desc: "Creative themed designs, balloons, and customized decor for kids' birthdays and private social gatherings.",
+    inquireText: "Themed Parties",
+    isFeatured: true
+  },
+  {
+    id: 'corporate-galas',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg",
+
+    title: "Corporate Galas",
+    meta: "90+ Corporate Events",
+    desc: "Professional stage branding, audio-visual coordinate setups, premium conference decor, and awards night arrangements.",
+    inquireText: "Corporate Event",
+    isFeatured: true
+  },
+  {
+    id: 'photography-videography',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-17.jpg",
+
+    title: "Photography & Videography",
+    meta: "200+ Shoots Covered",
+    desc: "Cinematic highlight reels, professional event photography, and drone packages capturing every single emotion.",
+    inquireText: "Photography",
+    isFeatured: false
+  },
+  {
+    id: 'entertainment-music',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-18.jpg",
+
+    title: "Entertainment & Live Music",
+    meta: "100+ Live Stages",
+    desc: "Live wedding bands, classical musicians, professional DJs, sound setups, and elite artist management.",
+    inquireText: "Entertainment",
+    isFeatured: false
+  },
+  {
+    id: 'transport-logistics',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-22.jpg",
+
+    title: "Guest Transportation & Logistics",
+    meta: "70+ Event Fleets",
+    desc: "Premium guest arrivals, vehicle arrangements, route coordination, and hospitality helpdesk management.",
+    inquireText: "Transport",
+    isFeatured: false
+  },
+  {
+    id: 'floral-arrangements',
+    img: "https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-9.jpg",
+
+    title: "Floral Arrangements",
+    meta: "500+ Floral Styles",
+    desc: "Exotic floral setups, table centerpieces, fresh flower decorations, and customized boutique arrangements.",
+    inquireText: "Floral",
+    isFeatured: false
+  }
+];
+
+const defaultContact = {
+  phone: '+91 84593 98321',
+  email: 'Ayushkale0412@gmail.com',
+  address: 'Premium Plaza, Suite 402, Dharampeth, Nagpur',
+  timings: 'Mon - Sun: 09:00 AM - 09:00 PM',
+  instagram: 'https://www.instagram.com/royal_eventanddecor?igsh=MXQ5bDI0NzBkbmhoaQ==',
+  linkedin: '#',
+  whatsapp: 'https://wa.me/918459398321?text=Hi%20Dream%20Day%20Events%2C%20I%20am%20interested%20in%20your%20services.',
+  mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119066.41709462553!2d78.96288091640625!3d21.161085900000006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c0a5a31faf13%3A0x19b37d06d0bb3e2b!2sNagpur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1690000000000!5m2!1sen!2sin'
+};
+
 export const DataProvider = ({ children }) => {
   const [packagesData, setPackagesData] = useState(defaultPackages);
   const [galleryData, setGalleryData] = useState(defaultGallery);
-  const [testimonialsData, setTestimonialsData] = useState(defaultTestimonials);
   const [managerData, setManagerData] = useState(defaultManager);
   const [videosData, setVideosData] = useState(defaultVideos);
   const [heroData, setHeroData] = useState(defaultHero);
   const [aboutData, setAboutData] = useState(defaultAbout);
+  const [highlightsData, setHighlightsData] = useState([]);
+  const [servicesData, setServicesData] = useState([]);
+  const [testimonialsData, setTestimonialsData] = useState([]);
+  const [contactData, setContactData] = useState(defaultContact);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Seed default data if it doesn't exist
     const initializeData = async () => {
       try {
         const pkgRef = doc(db, 'content', 'packages');
         const pkgSnap = await getDoc(pkgRef);
-        if (!pkgSnap.exists()) {
-          await setDoc(pkgRef, defaultPackages);
-        }
+        if (!pkgSnap.exists()) await setDoc(pkgRef, defaultPackages);
 
         const galRef = doc(db, 'content', 'gallery');
         const galSnap = await getDoc(galRef);
         if (!galSnap.exists() || !galSnap.data().images || galSnap.data().images.length <= 6) {
           await setDoc(galRef, { images: defaultGallery });
         }
-
         const mgrRef = doc(db, 'content', 'manager');
         const mgrSnap = await getDoc(mgrRef);
-        if (!mgrSnap.exists()) {
-          await setDoc(mgrRef, defaultManager);
-        }
+        if (!mgrSnap.exists()) await setDoc(mgrRef, defaultManager);
 
         const vidRef = doc(db, 'content', 'videos');
         const vidSnap = await getDoc(vidRef);
-        if (!vidSnap.exists() || !vidSnap.data().videos || vidSnap.data().videos.length === 0) {
-          await setDoc(vidRef, { videos: defaultVideos });
-        }
+        if (!vidSnap.exists()) await setDoc(vidRef, { videos: defaultVideos });
 
         const heroRef = doc(db, 'content', 'hero');
         const heroSnap = await getDoc(heroRef);
-        if (!heroSnap.exists()) {
-          await setDoc(heroRef, defaultHero);
-        }
+        if (!heroSnap.exists()) await setDoc(heroRef, defaultHero);
 
         const aboutRef = doc(db, 'content', 'about');
         const aboutSnap = await getDoc(aboutRef);
-        if (!aboutSnap.exists()) {
-          await setDoc(aboutRef, defaultAbout);
-        }
-        
-        // Check testimonials collection empty? (we do this inside unsubTestimonials if empty but let's seed here)
-        // For simplicity, we won't seed testimonials into DB right here, instead we'll seed them via a batch or just use defaultTestimonials in context if db is empty.
+        if (!aboutSnap.exists()) await setDoc(aboutRef, defaultAbout);
+
+        const highRef = doc(db, 'content', 'highlights');
+        const highSnap = await getDoc(highRef);
+        if (!highSnap.exists()) await setDoc(highRef, { tagline: "✦ Experience the Magic ✦", title: "Cinematic", titleHighlight: "Highlights", videoIds: [] });
+
+        const srvRef = doc(db, 'content', 'services');
+        const srvSnap = await getDoc(srvRef);
+        if (!srvSnap.exists()) await setDoc(srvRef, { services: [] });
+
+        const contactRef = doc(db, 'content', 'contact');
+        const contactSnap = await getDoc(contactRef);
+        if (!contactSnap.exists()) await setDoc(contactRef, defaultContact);
       } catch (err) {
         console.error("Error initializing Firebase data:", err);
       }
@@ -220,56 +342,34 @@ export const DataProvider = ({ children }) => {
 
     initializeData();
 
-    // Listen to live updates
-    const unsubPackages = onSnapshot(doc(db, 'content', 'packages'), (doc) => {
-      if (doc.exists()) {
-        setPackagesData(doc.data());
-      }
-    });
-
-    const unsubGallery = onSnapshot(doc(db, 'content', 'gallery'), (doc) => {
-      if (doc.exists()) {
-        setGalleryData(doc.data().images || []);
-      }
-    });
-
-    const unsubTestimonials = onSnapshot(collection(db, 'testimonials'), (snapshot) => {
-      const tests = [];
-      snapshot.forEach(doc => {
-        tests.push({ id: doc.id, ...doc.data() });
-      });
-      // Sort by creation date if needed
-      tests.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
-        return timeB - timeA;
-      });
-      if (tests.length > 0) {
-        setTestimonialsData(tests);
-      }
-    });
-
-    const unsubManager = onSnapshot(doc(db, 'content', 'manager'), (doc) => {
-      if (doc.exists()) {
-        setManagerData(doc.data());
-      }
-    });
-
-    const unsubVideos = onSnapshot(doc(db, 'content', 'videos'), (doc) => {
-      if (doc.exists()) {
-        setVideosData(doc.data().videos || []);
-      }
-    });
-
-    const unsubHero = onSnapshot(doc(db, 'content', 'hero'), (doc) => {
-      if (doc.exists()) {
-        setHeroData(doc.data());
-      }
-    });
-
-    const unsubAbout = onSnapshot(doc(db, 'content', 'about'), (doc) => {
-      if (doc.exists()) {
-        setAboutData(doc.data());
+    const unsubPackages = onSnapshot(doc(db, 'content', 'packages'), (doc) => { if (doc.exists()) setPackagesData(doc.data()); });
+    const unsubGallery = onSnapshot(doc(db, 'content', 'gallery'), (doc) => { if (doc.exists()) setGalleryData(doc.data().images || []); });
+    const unsubManager = onSnapshot(doc(db, 'content', 'manager'), (doc) => { if (doc.exists()) setManagerData(doc.data()); });
+    const unsubVideos = onSnapshot(doc(db, 'content', 'videos'), (doc) => { if (doc.exists()) setVideosData(doc.data().videos || []); });
+    const unsubHero = onSnapshot(doc(db, 'content', 'hero'), (doc) => { if (doc.exists()) setHeroData(doc.data()); });
+    const unsubAbout = onSnapshot(doc(db, 'content', 'about'), (doc) => { if (doc.exists()) setAboutData(doc.data()); });
+    const unsubHighlights = onSnapshot(doc(db, 'content', 'highlights'), (doc) => { if (doc.exists()) setHighlightsData(doc.data()); });
+    const unsubServices = onSnapshot(doc(db, 'content', 'services'), (doc) => { if (doc.exists()) setServicesData(doc.data().services || []); });
+    const unsubContact = onSnapshot(doc(db, 'content', 'contact'), (doc) => { if (doc.exists()) setContactData(doc.data()); });
+    
+    const unsubTestimonials = onSnapshot(doc(db, 'content', 'testimonials'), async (docSnap) => {
+      if (docSnap.exists() && docSnap.data().testimonials && docSnap.data().testimonials.length > 0) {
+        setTestimonialsData(docSnap.data().testimonials);
+      } else {
+        const defaultTestimonials = [
+          { id: 't1', name: 'Amit Deshpande', location: 'Event — Nagpur', text: 'Excellent coordination! Mr. Ayush Kale managed the entire sangeet and catering display flawlessly.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-1.jpg?v=9', pfp: '/images/boy_avatar.png' },
+          { id: 't2', name: 'Neha Kulkarni', location: 'Event — Nagpur', text: 'They transformed a simple banquet hall into a royal wedding palace. The gold frame elements were outstanding.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-2.jpg?v=9', pfp: '/images/girl_avatar.png' },
+          { id: 't3', name: 'Rajesh Sen', location: 'Event — Nagpur', text: 'Top tier professionalism. Easy booking, premium catering setup, and gorgeous lighting design.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-3.jpg?v=9', pfp: '/images/boy_avatar.png' },
+          { id: 't4', name: 'Priya Sharma', location: 'Event — Nagpur', text: 'Dream Day Events made my haldi ceremony look like a movie set. The vibrant yellow themes were perfect!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-5.jpg?v=9', pfp: '/images/girl_avatar.png' },
+          { id: 't5', name: 'Vikram Joshi', location: 'Event — Nagpur', text: 'Hosted our corporate gala with them. The stage branding and AV setup were top-notch.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-14.jpg', pfp: '/images/boy_avatar.png' },
+          { id: 't6', name: 'Sneha Patel', location: 'Event — Nagpur', text: 'The reception decor was breathtaking! Ambient lighting and elegant drapes added so much class.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-red.jpg', pfp: '/images/girl_avatar.png' },
+          { id: 't7', name: 'Rahul Mehta', location: 'Event — Nagpur', text: 'Gourmet catering that truly delivers on taste and presentation. Their staff was courteous.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-10.jpg', pfp: '/images/boy_avatar.png' },
+          { id: 't8', name: 'Anjali Verma', location: 'Event — Nagpur', text: 'From planning to execution, every detail was handled with precision.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/wedding-stage-green.jpg', pfp: '/images/girl_avatar.png' },
+          { id: 't9', name: 'Siddharth Rao', location: 'Event — Nagpur', text: 'We had a themed birthday party and the balloon decor was so creative and beautifully done.', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/event-12.jpg', pfp: '/images/boy_avatar.png' },
+          { id: 't10', name: 'Kavita Iyer', location: 'Event — Nagpur', text: 'Highly impressed with their outdoor lawn styling. The sky-blue decor was a hit!', img: 'https://storage.googleapis.com/dream-day-events-sw.firebasestorage.app/images/blue-stage-new.jpg', pfp: '/images/girl_avatar.png' }
+        ];
+        setTestimonialsData(defaultTestimonials);
+        await setDoc(doc(db, 'content', 'testimonials'), { testimonials: defaultTestimonials });
       }
     });
 
@@ -278,27 +378,31 @@ export const DataProvider = ({ children }) => {
     return () => {
       unsubPackages();
       unsubGallery();
-      unsubTestimonials();
       unsubManager();
       unsubVideos();
       unsubHero();
       unsubAbout();
+      unsubHighlights();
+      unsubServices();
+      unsubTestimonials();
+      unsubContact();
     };
   }, []);
 
-  const value = {
-    packagesData,
-    galleryData,
-    testimonialsData,
-    managerData,
-    videosData,
-    heroData,
-    aboutData,
-    loading
-  };
-
   return (
-    <DataContext.Provider value={value}>
+    <DataContext.Provider value={{ 
+      packagesData, 
+      galleryData, 
+      managerData, 
+      heroData, 
+      aboutData, 
+      videosData, 
+      highlightsData, 
+      servicesData, 
+      testimonialsData, 
+      contactData,
+      loading 
+    }}>
       {!loading && children}
     </DataContext.Provider>
   );

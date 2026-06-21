@@ -13,7 +13,9 @@ import {
   Crown,
   Video,
   Image,
-  Users
+  Users,
+  Star,
+  PhoneCall
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,8 +24,12 @@ const navigation = [
   { name: 'Pricing', href: '/prices', icon: DollarSign },
   { name: 'Gallery', href: '/gallery', icon: ImageIcon },
   { name: 'Videos', href: '/videos', icon: Video },
+  { name: 'Services', href: '/services', icon: Star },
+  { name: 'Testimonials', href: '/testimonials', icon: MessageSquare },
+  { name: 'Contact Info', href: '/contact', icon: PhoneCall },
   { name: 'Hero', href: '/hero', icon: Image },
   { name: 'About', href: '/about', icon: Users },
+  { name: 'Highlights', href: '/highlights', icon: Star },
   { name: 'Manager', href: '/manager', icon: User },
   { name: 'Inquiries', href: '/inquiries', icon: Mail },
 ];
@@ -33,10 +39,13 @@ const pageTitles = {
   '/prices': 'Pricing',
   '/gallery': 'Gallery',
   '/videos': 'Video Highlights',
+  '/services': 'Manage Services',
   '/hero': 'Hero Section',
   '/about': 'About Section',
+  '/highlights': 'Cinematic Highlights',
   '/manager': 'Manager',
   '/testimonials': 'Testimonials',
+  '/contact': 'Contact & Footer Settings',
   '/inquiries': 'Inquiries',
 };
 

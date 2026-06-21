@@ -12,6 +12,10 @@ import Videos from './pages/Videos';
 import Inquiries from './pages/Inquiries';
 import HeroSettings from './pages/HeroSettings';
 import AboutSettings from './pages/AboutSettings';
+import HighlightsSettings from './pages/HighlightsSettings';
+import ServicesSettings from './pages/ServicesSettings';
+import TestimonialsSettings from './pages/TestimonialsSettings';
+import ContactSettings from './pages/ContactSettings';
 import { Agentation } from 'agentation';
 
 function App() {
@@ -30,6 +34,10 @@ function App() {
               <Route path="videos" element={<Videos />} />
               <Route path="hero" element={<HeroSettings />} />
               <Route path="about" element={<AboutSettings />} />
+              <Route path="highlights" element={<HighlightsSettings />} />
+              <Route path="services" element={<ServicesSettings />} />
+              <Route path="testimonials" element={<TestimonialsSettings />} />
+              <Route path="contact" element={<ContactSettings />} />
               <Route path="manager" element={<Manager />} />
               <Route path="inquiries" element={<Inquiries />} />
             </Route>

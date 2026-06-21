@@ -69,6 +69,11 @@ export default function Videos() {
     e.preventDefault();
     if (!file) return;
 
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error('Video must be under 20MB. Please compress it first.');
+      return;
+    }
+
     setUploading(true);
     setUploadProgress(0);
     try {
@@ -198,7 +203,7 @@ export default function Videos() {
           <h3 className="text-base font-semibold text-text-primary mb-4">Upload New Video</h3>
           <form onSubmit={handleUpload} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField label="Select Video (MP4 recommended)">
+              <FormField label="Select Video (MP4 recommended, Max 20MB)">
                 <input
                   type="file"
                   accept="video/*"
